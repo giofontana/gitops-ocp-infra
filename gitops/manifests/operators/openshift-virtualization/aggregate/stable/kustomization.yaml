@@ -7,3 +7,4 @@ commonAnnotations:
 
 resources:
   - github.com/redhat-cop/gitops-catalog/virtualization-operator/base
+  - ../../instance/overlays/default
