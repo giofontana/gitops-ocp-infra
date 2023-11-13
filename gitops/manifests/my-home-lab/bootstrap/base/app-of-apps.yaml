@@ -14,8 +14,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/cluster/apps/base
-    repoURL: https://github.com/redhat-app-services/gitops-tekton-demo.git
+    path: gitops/manifests/my-home-lab/apps/base
+    repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
     automated:
