@@ -1,0 +1,3 @@
+[submodule "gitops-catalog"]
+	path = gitops-catalog
+	url = https://github.com/redhat-cop/gitops-catalog.git

@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: quarkus-pipeline-event-listener
+  namespace: demo-quarkus-pipeline
+  labels:
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: quarkus-pipeline-event-listener
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: el-quarkus-pipeline-event-listener
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

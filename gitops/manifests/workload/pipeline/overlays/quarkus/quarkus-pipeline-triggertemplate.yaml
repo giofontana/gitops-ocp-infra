@@ -1,0 +1,39 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: quarkus-pipeline-trigger-template
+  namespace: demo-quarkus-pipeline
+spec:
+  params:
+    - name: git-revision
+    - name: git-repo-url
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        annotations:
+          pipeline.openshift.io/started-by: admin
+        generateName: quarkus-pipeline-
+        labels:
+          tekton.dev/pipeline: quarkus-pipeline
+        namespace: demo-quarkus-pipeline
+      spec:
+        params:
+          - name: GIT_URL
+            value: $(tt.params.git-repo-url)
+          - name: GIT_BRANCH
+            value: $(tt.params.git-revision)
+          - name: OUTPUT_IMAGE
+            value: quay.io/stauil/quarkus-meat-helper
+          - name: OUTPUT_TAG
+            value: demo
+        pipelineRef:
+          name: quarkus-pipeline
+        resources: []
+        status: null
+        workspaces:
+          - name: meat-helper-cicd-pvc
+            persistentVolumeClaim:
+              claimName: source-workspace
+          - emptyDir: {}
+            name: maven-settings

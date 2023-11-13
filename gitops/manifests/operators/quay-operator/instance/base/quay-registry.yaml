@@ -1,0 +1,7 @@
+apiVersion: quay.redhat.com/v1
+kind: QuayRegistry
+metadata:
+  name: demo
+  namespace: registry
+spec:
+  configBundleSecret: init-config-bundle-secret
