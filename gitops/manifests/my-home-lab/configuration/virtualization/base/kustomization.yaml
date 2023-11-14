@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - homelab-vms-namespace.yaml
   - homelab-vms-networkattachmentdefinition.yaml
+  - storageclass-vms.yaml

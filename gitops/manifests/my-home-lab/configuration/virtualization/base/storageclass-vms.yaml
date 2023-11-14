@@ -1,0 +1,29 @@
+###
+#
+# Option krbd:rxbounce added to avoid VirtualMachineCRCErrors warning. 
+# Check here for more information: https://docs.openshift.com/container-platform/4.14/virt/monitoring/virt-runbooks.html#virt-runbook-VirtualMachineCRCErrors
+#
+###
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: odf-ceph-rbd-vms
+  annotations:
+    description: 'Provides Block volumes for VMs with krbd:rxbounce enabled'
+provisioner: openshift-storage.rbd.csi.ceph.com
+parameters:
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-namespace: openshift-storage
+  csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+  imageFormat: '2'
+  clusterID: openshift-storage
+  imageFeatures: 'layering,deep-flatten,exclusive-lock,object-map,fast-diff'
+  csi.storage.k8s.io/controller-expand-secret-namespace: openshift-storage
+  pool: ocs-storagecluster-cephblockpool
+  csi.storage.k8s.io/node-stage-secret-namespace: openshift-storage
+  mapOptions: "krbd:rxbounce"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate

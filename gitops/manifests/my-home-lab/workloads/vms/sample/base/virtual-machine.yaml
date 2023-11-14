@@ -25,6 +25,7 @@ spec:
           resources:
             requests:
               storage: 30Gi
+          storageClassName: odf-ceph-rbd-vms
   running: true
   template:
     metadata:
