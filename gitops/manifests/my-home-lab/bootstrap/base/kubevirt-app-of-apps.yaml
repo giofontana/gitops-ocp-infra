@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-of-apps
+  name: kubevirt-app-of-apps
   namespace: openshift-gitops
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -14,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/my-home-lab/apps/base
+    path: gitops/manifests/my-home-lab/apps/kubevirt
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

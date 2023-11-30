@@ -1,26 +1,27 @@
 apiVersion: local.storage.openshift.io/v1alpha1
 kind: LocalVolumeSet
 metadata:
-  name: hardware-localvolumeset
+  name: local-disks
   namespace: openshift-local-storage
 spec:
   deviceInclusionSpec:
-    deviceMechanicalProperties:
-      - Rotational
-      - NonRotational
     deviceTypes:
       - disk
       - part
-    minSize: 10G
+    minSize: 1Gi
   nodeSelector:
     nodeSelectorTerms:
       - matchExpressions:
-          - values:
-              - marge
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
               - bart
               - homer
-            key: kubernetes.io/hostname
-            operator: In
-  maxDeviceCount: 10
-  storageClassName: local-sc
+              - marge
+  storageClassName: local-disks
+  tolerations:
+    - effect: NoSchedule
+      key: node.ocs.openshift.io/storage
+      operator: Equal
+      value: 'true'
   volumeMode: Block
