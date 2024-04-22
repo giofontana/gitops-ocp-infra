@@ -5,6 +5,10 @@
     src: "{{ argocd_application }}"
   register: apply_result
 
+- name: Waiting for ArgoCD Application creation
+  ansible.builtin.pause:
+    minutes: 1
+
 - name: "Check if ArgoCD Application {{ app_name }} on namespace {{ argocd_namespace }} is Healthy"
   kubernetes.core.k8s_info:
     kind: Application

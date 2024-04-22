@@ -19,9 +19,4 @@ spec:
               - homer
               - marge
   storageClassName: local-disks
-  tolerations:
-    - effect: NoSchedule
-      key: node.ocs.openshift.io/storage
-      operator: Equal
-      value: 'true'
   volumeMode: Block
