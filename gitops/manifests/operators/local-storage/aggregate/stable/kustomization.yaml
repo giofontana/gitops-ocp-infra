@@ -6,4 +6,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
+  - ../../base/
   - ../../overlays/localvolumeset
