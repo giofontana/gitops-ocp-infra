@@ -7,4 +7,5 @@ commonAnnotations:
 
 resources:
   - ../../base/
+  - ../../overlays/localvolumediscovery
   - ../../overlays/localvolumeset
