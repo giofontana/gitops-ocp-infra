@@ -12,6 +12,7 @@
 - name: "Check if ArgoCD Application {{ app_name }} on namespace {{ argocd_namespace }} is Healthy"
   kubernetes.core.k8s_info:
     kind: Application
+    api_version: "argoproj.io/v1alpha1"    
     namespace: "{{ argocd_namespace }}"
     name: "{{ app_name }}"
   register: app_health
@@ -20,9 +21,10 @@
   delay: 30
   when: apply_result.changed
 
-- name: Wait for ArgoCD Application {{ app_name }} on namespace {{ argocd_namespace }} to be Ready
+- name: "Wait for ArgoCD Application {{ app_name }} on namespace {{ argocd_namespace }} to be Synced"
   kubernetes.core.k8s_info:
     kind: Application
+    api_version: "argoproj.io/v1alpha1"    
     namespace: "{{ argocd_namespace }}"
     name: "{{ app_name }}"
   register: app_ready

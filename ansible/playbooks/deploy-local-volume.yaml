@@ -1,0 +1,10 @@
+---
+- name: Deploy local volume operator
+  hosts: localhost
+  become: false
+
+  roles:
+    - role: argocd-app
+      vars:
+        argocd_application: "../../gitops/manifests/my-home-lab/argocd-apps/local-storage/application.yaml" 
+        app_name: local-storage
