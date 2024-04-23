@@ -20,3 +20,18 @@ spec:
     automated:
       prune: false
       selfHeal: true
+  ignoreDifferences:
+    - group: ocs.openshift.io
+      kind: StorageCluster
+      jsonPointers:
+        - /status
+      health.lua: |
+        hs = {}
+        if obj.status ~= nil and obj.status.phase == "Healthy" then
+          hs.status = "Healthy"
+          hs.message = "StorageCluster is healthy."
+        else
+          hs.status = "Degraded"
+          hs.message = "StorageCluster is not healthy: " .. (obj.status.phase or "unknown")
+        end
+        return hs      

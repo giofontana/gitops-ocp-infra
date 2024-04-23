@@ -27,3 +27,22 @@
       vars:
         argocd_application: "../../gitops/manifests/my-home-lab/argocd-apps/openshift-data-foundation/application.yaml" 
         app_name: openshift-data-foundation
+        num_retries: 40
+
+- name: Wait for OpenShift Data Foundation to be fully deployed
+  hosts: localhost
+  become: false
+
+  tasks:
+
+    - name: "Wait for ocs-storagecluster to be Healthy"
+      kubernetes.core.k8s_info:
+        kind: StorageCluster
+        api_version: "ocs.openshift.io/v1"
+        namespace: openshift-storage
+        name: ocs-storagecluster
+      register: st_cluster_health
+      until: st_cluster_health.resources[0].status.phase == 'Healthy'
+      retries: 40
+      delay: 30
+      when: apply_result.changed

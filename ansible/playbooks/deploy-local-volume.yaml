@@ -8,3 +8,4 @@
       vars:
         argocd_application: "../../gitops/manifests/my-home-lab/argocd-apps/local-storage/application.yaml" 
         app_name: local-storage
+        num_retries: 20
