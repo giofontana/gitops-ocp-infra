@@ -9,3 +9,4 @@ resources:
   - openshift-data-foundation-operator.yaml
   - openshift-data-foundation-instance.yaml
   - openshift-virt-operator.yaml
+  - openshift-virt-instance.yaml
