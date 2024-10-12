@@ -13,5 +13,5 @@ if ! oc auth can-i '*' '*' --all-namespaces > /dev/null 2>&1; then
 fi
 
 # Deploy openshift gitops
-oc apply -k gitops/manifests/operators/openshift-gitops-operator/overlays/latest
+oc apply -k gitops/manifests/operators/my-home-lab/bootstrap/base
 oc patch consoles.operator.openshift.io/cluster --type='merge' -p '{"spec":{"plugins":["gitops-plugin"]}}'
