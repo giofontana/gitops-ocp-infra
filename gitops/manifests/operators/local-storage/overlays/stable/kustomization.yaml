@@ -6,4 +6,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - github.com/gitops-catalog/local-storage/operator/overlays/stable
+  - github.com/redhat-cop/gitops-catalog/local-storage/operator/overlays/stable
