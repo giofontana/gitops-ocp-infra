@@ -6,4 +6,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - github.com/giofontana/gitops-catalog/openshift-data-foundation-operator/aggregate/overlays/local-storage?ref=odf-local-storage
+  - github.com/redhat-cop/gitops-catalog/openshift-data-foundation-operator/overlays/stable-4.16

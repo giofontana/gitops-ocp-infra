@@ -6,3 +6,4 @@ resources:
   - configure-vlans.yaml 
   - local-volume-operator.yaml
   - local-volume-instances.yaml
+  - openshift-data-foundation-operator.yaml
