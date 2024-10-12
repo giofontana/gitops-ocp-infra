@@ -6,6 +6,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - ../../base/
-  - ../../overlays/localvolumediscovery
-  - ../../overlays/localvolumeset
+  - github.com/gitops-catalog/local-storage/operator/overlays/stable
