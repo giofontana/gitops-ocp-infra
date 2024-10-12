@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/operators/openshift-data-foundation/overlays/stable-4.16
+    path: gitops/manifests/operators/openshift-data-foundation/overlays/stable
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
