@@ -42,7 +42,6 @@
         namespace: openshift-storage
         name: ocs-storagecluster
       register: st_cluster_health
-      until: st_cluster_health.resources[0].status.phase == 'Healthy'
-      retries: 40
+      until: (st_cluster_health.resources | length > 0) and (st_cluster_health.resources[0].status.phase == 'Healthy')
+      retries: 120
       delay: 30
-      when: apply_result.changed

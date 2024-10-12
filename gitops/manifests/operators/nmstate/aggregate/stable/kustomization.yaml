@@ -6,5 +6,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - github.com/redhat-cop/gitops-catalog/nmstate/operator/
-  - github.com/redhat-cop/gitops-catalog/nmstate/instance/
+  - github.com/redhat-cop/gitops-catalog/nmstate/operator/overlays/stable
+  - github.com/redhat-cop/gitops-catalog/nmstate/instance/overlays/default
