@@ -25,6 +25,9 @@ spec:
       spec:
         accessModes:
         - ReadWriteOnce
+        resources:
+          requests:
+            storage: "100Mi"        
         storageClassName: localdisks
         volumeMode: Block
     name: ocs-deviceset
