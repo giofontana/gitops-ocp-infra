@@ -3,8 +3,6 @@ kind: NodeNetworkConfigurationPolicy
 metadata:
   name: vlan4-bond0
 spec:
-  nodeSelector:
-    kubernetes.io/hostname: homer
   desiredState:
     interfaces:
       - description: vlan4 using bond0
