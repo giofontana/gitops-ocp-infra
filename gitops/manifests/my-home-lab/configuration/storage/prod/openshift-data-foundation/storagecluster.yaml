@@ -8,31 +8,26 @@ spec:
   encryption:
     kms: {}
   externalStorage: {}
+  flexibleScaling: true
+  monDataDirHostPath: /var/lib/rook
   managedResources:
-    cephBlockPools: {}
+    cephBlockPools:
+      reconcileStrategy: manage
     cephConfig: {}
-    cephDashboard: {}
     cephFilesystems: {}
     cephObjectStoreUsers: {}
     cephObjectStores: {}
-  mirroring: {}
-  nodeTopologies: {}
+  multiCloudGateway:
+    reconcileStrategy: manage
   storageDeviceSets:
-    - config: {}
-      count: 3
-      dataPVCTemplate:
-        metadata: {}
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: '1'
-          storageClassName: localdisks
-          volumeMode: Block
-        status: {}
-      name: ocs-deviceset-localdisks
-      placement: {}
-      preparePlacement: {}
-      replica: 1
-      resources: {}
+  - count: 1
+    dataPVCTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        storageClassName: localdisks
+        volumeMode: Block
+    name: ocs-deviceset
+    placement: {}
+    portable: false
+    replica: 3
