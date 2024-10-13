@@ -10,3 +10,4 @@ resources:
   - openshift-data-foundation-instance.yaml
   - openshift-virt-operator.yaml
   - openshift-virt-instance.yaml
+  - bitnami-sealed-secrets.yaml
