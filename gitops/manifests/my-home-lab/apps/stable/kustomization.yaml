@@ -12,3 +12,4 @@ resources:
   - openshift-virt-instance.yaml
   - bitnami-sealed-secrets.yaml
   - configure-auth.yaml
+  - openshift-monitoring-persistence.yaml
