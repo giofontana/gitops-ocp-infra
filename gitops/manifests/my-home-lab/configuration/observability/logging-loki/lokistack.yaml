@@ -26,7 +26,7 @@ spec:
   size: 1x.extra-small
   storage:
     tls:
-      caName: "openshift-service-ca.crt"  
+      caName: openshift-service-ca.crt
     schemas:
     - effectiveDate: "2020-10-11"
       version: v13

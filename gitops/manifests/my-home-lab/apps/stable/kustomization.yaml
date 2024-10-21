@@ -13,4 +13,5 @@ resources:
   - bitnami-sealed-secrets.yaml
   - configure-auth.yaml
   - openshift-monitoring-persistence.yaml
-  - openshift-logging-loki.yaml
+  - openshift-logging-loki-operator.yaml
+  - openshift-logging-loki-instance.yaml
