@@ -1,0 +1,60 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: remove-kubadmin-job-sa-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - delete   
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: remove-kubadmin-job-sa-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: remove-kubadmin-job-sa-role
+subjects:
+  - kind: ServiceAccount
+    name: cli-job-sa
+    namespace: kube-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cli-job-sa
+  namespace: kube-system
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: remove-kubadmin
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      containers:
+        - image: registry.redhat.io/openshift4/ose-cli:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+
+              echo "Removing kubeadmin"
+              oc delete secrets kubeadmin -n kube-system
+
+              echo -n "kubeadmin removed successfully!"
+
+          imagePullPolicy: IfNotPresent
+          name: observability-setup
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      serviceAccount: cli-job-sa
+      serviceAccountName: cli-job-sa
+      terminationGracePeriodSeconds: 30

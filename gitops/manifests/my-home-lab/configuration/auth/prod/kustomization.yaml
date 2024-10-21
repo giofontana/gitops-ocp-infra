@@ -5,3 +5,4 @@ resources:
   - htpass-sealedsecret.yaml
   - oauth-cluster.yaml
   - cluster-role-binding.yaml
+  - consolenotification.yaml
