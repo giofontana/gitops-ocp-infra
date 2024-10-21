@@ -1,0 +1,42 @@
+apiVersion: loki.grafana.com/v1
+kind: LokiStack
+metadata:
+  name: logging-loki
+  namespace: openshift-logging
+spec:
+  limits:
+    global:
+      retention:
+        days: 20
+      ingestion:
+        ingestionRate: 8
+        ingestionBurstSize: 16
+        maxLabelNameLength: 1024
+        maxLabelValueLength: 2048
+        maxLabelNamesPerSeries: 30
+        maxGlobalStreamsPerTenant: 10000
+        maxLineSize: 256000
+      queries:
+        maxEntriesLimitPerQuery: 10000
+        maxChunksPerQuery: 2000000
+        maxQuerySeries: 1000
+        queryTimeout: 1m
+  managementState: Managed
+  replicationFactor: 1
+  size: 1x.extra-small
+  storage:
+    tls:
+      caName: "openshift-service-ca.crt"  
+    schemas:
+    - effectiveDate: "2020-10-11"
+      version: v13
+    secret:
+      name: logging-loki-odf
+      type: s3
+  storageClassName: ocs-storagecluster-ceph-rbd
+  tenants:
+    mode: openshift-logging
+  hashRing:
+    type: memberlist
+    memberlist:
+      instanceAddrType: podIP    
