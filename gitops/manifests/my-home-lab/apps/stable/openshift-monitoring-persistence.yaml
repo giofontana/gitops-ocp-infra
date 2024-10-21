@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/my-home-lab/configuration/observability/openshift-monitoring
+    path: gitops/manifests/my-home-lab/configuration/observability/openshift-monitoring/prod
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
