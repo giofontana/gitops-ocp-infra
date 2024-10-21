@@ -6,3 +6,4 @@ resources:
   - oauth-cluster.yaml
   - cluster-role-binding.yaml
   - consolenotification.yaml
+  - remove-kubeadmin-job.yaml
