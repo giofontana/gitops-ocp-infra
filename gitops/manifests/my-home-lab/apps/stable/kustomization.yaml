@@ -16,3 +16,4 @@ resources:
   - openshift-logging-loki-operator.yaml
   - openshift-logging-loki-configuration.yaml
   - cluster-observability-operator.yaml
+  - cluster-observability-instances.yaml
