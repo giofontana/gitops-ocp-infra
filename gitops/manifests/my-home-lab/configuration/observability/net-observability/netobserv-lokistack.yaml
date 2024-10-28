@@ -1,7 +1,7 @@
 apiVersion: loki.grafana.com/v1
 kind: LokiStack
 metadata:
-  name: logging-loki
+  name: loki
   namespace: netobserv
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous  
