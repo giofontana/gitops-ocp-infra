@@ -10,5 +10,6 @@ resources:
 configMapGenerator:
   - name: job-console-plugin
     namespace: openshift-netobserv-operator
+    behavior: merge
     files:
       - console-plugin-job.sh
