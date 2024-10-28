@@ -10,3 +10,4 @@ resources:
   - netobserv-lokistack.yaml
   - objectbucketclaim.yaml
   - loki-s3-secret-creation-job.yaml
+  - flowcollector.yaml
