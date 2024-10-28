@@ -6,3 +6,9 @@ resources:
   - operatorgroup.yaml
   - subscription.yaml
   - console-plugin-job.yaml
+
+configMapGenerator:
+  - name: job-console-plugin
+    namespace: openshift-netobserv-operator
+    files:
+      - console-plugin-job.sh
