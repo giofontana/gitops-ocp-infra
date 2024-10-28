@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/operators/netobserv-operator/overlays/stable
+    path: gitops/manifests/operators/net-observability/overlays/stable
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
