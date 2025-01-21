@@ -8,5 +8,8 @@ spec:
     ovn:
       bridge-mappings:
         - bridge: br-ex
+          localnet: localnet-vlan1
+          state: present      
+        - bridge: br-ex
           localnet: localnet-vlan4
           state: present

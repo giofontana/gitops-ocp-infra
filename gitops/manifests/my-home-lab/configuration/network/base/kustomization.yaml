@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - nncp-vlan4-bond0.yaml
-  - nad-ovs-bridge-vlan4.yaml
-  - nncp-vlan3-bond0.yaml
-  - nad-ovs-bridge-vlan3.yaml  
+  - nncp-br-ex-localnets.yaml
+  - nad-localnet-vlan1.yaml
+  - nad-localnet-vlan4.yaml
