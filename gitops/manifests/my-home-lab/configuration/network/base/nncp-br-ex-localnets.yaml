@@ -4,7 +4,6 @@ metadata:
   name: br-ex-localnets
 spec:
   desiredState:
-    interfaces:
     ovn:
       bridge-mappings:
         - bridge: br-ex
