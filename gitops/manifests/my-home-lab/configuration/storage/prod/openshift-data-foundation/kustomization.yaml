@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
 #  - storagesystem.yaml
+  - hdd-disks-workaround.yaml
   - storagecluster.yaml
   - ocsinitialization.yaml
