@@ -81,3 +81,8 @@ spec:
           name: set-disk-rotational.service
 EOF
 ```
+
+4. Apply it:
+```
+oc apply -f hdd-disks-workaround.yaml
+```
