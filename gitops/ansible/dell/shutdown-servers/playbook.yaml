@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
   gather_facts: no
   collections:
     - dellemc.openmanage
@@ -7,11 +7,12 @@
   tasks:
     - name: "Performing graceful shutdown operation"
       dellemc.openmanage.redfish_powerstate:
-        baseuri: "{{ ansible_host }}"
-        username: "{{ ansible_user }}"
-        password: "{{ ansible_password }}"
+        baseuri: "{{ hostvars[item]['ansible_host'] }}"
+        username: "{{ hostvars[item]['ansible_user'] }}"
+        password: "{{ hostvars[item]['ansible_password'] }}"
         validate_certs: false
         reset_type: "GracefulShutdown"
+      loop: "{{ groups['all'] }}"        
 
     - name: "Wait 15 mins and force shutdown servers"
       pause:
@@ -19,8 +20,9 @@
 
     - name: "Performing force shutdown operation"
       dellemc.openmanage.redfish_powerstate:
-        baseuri: "{{ ansible_host }}"
-        username: "{{ ansible_user }}"
-        password: "{{ ansible_password }}"
+        baseuri: "{{ hostvars[item]['ansible_host'] }}"
+        username: "{{ hostvars[item]['ansible_user'] }}"
+        password: "{{ hostvars[item]['ansible_password'] }}"
         validate_certs: false
         reset_type: "ForceOff"
+      loop: "{{ groups['all'] }}"        
