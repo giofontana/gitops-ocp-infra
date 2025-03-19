@@ -1,51 +1,18 @@
 # Workaround for ODF to work with HDD disks.
 
-1. Change the script below setting the appropriate ODF node names and disks wwn:
+1. Set config_base variable:
 
 ```bash
-#!/bin/bash
-
-# Get the hostname of the machine
-HOSTNAME=$(hostname)
-
-# Define the disk WWN based on the hostname
-case "$HOSTNAME" in
-    "marge.simpsons.lab.gfontana.me")
-        DISK_WWN="wwn-0x644a84202ca9cf002f5c702849484052"
-        ;;
-    "bart.simpsons.lab.gfontana.me")
-        DISK_WWN="wwn-0x61866da063b4c9002e9c3f2023019681"
-        ;;
-    "homer.simpsons.lab.gfontana.me")
-        DISK_WWN="wwn-0x61866da062ba8a002e9c435a0f77c154"
-        ;;
-    *)
-        echo "Hostname not recognized. Exiting."
-        exit 1
-        ;;
-esac
-
-# Find the corresponding disk device
-DISK_ID=$(readlink -f "/dev/disk/by-id/$DISK_WWN" | awk -F'/' '{print $NF}')
-
-if [ -n "$DISK_ID" ]; then
-    echo "Setting rotational value to 0 for $DISK_ID"
-    sudo bash -c "echo 0 > /sys/block/${DISK_ID}/queue/rotational"
-else
-    echo "Disk not found for WWN: $DISK_WWN"
-    exit 1
-fi
+config=$(cat <<'EOF'
+ACTION=="add|change", KERNEL=="sd[a-z]|scini*|nvme[0-9]*", SUBSYSTEM=="block",  ATTR{queue/rotational}="0"
+EOF
+)
+config_base64=$(echo "$config" | base64 -w0)
 ```
 
-2. Encode it with base 64:
+2. Create the MC. Note, it will trigger reboot of all servers.
 
-```
-config_base64=$(cat script.sh | base64 -w0)
-```
-
-3. Create the MC:
-
-```
+```bash
 cat <<EOF > hdd-disks-workaround.yaml
 apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig
@@ -59,30 +26,14 @@ spec:
       files:
         - contents:
             source: data:text/plain;charset=utf-8;base64,$config_base64
-          mode: 493
+          mode: 420
           overwrite: true
-          path: /usr/local/bin/set-disk-rotational.sh
-    systemd:
-      units:
-        - contents: |
-            [Unit]
-            Description=Set Disk Rotational Attribute
-            After=network-online.target
-            Wants=network-online.target
-
-            [Service]
-            Type=oneshot
-            ExecStart=/usr/local/bin/set-disk-rotational.sh
-            RemainAfterExit=true
-
-            [Install]
-            WantedBy=multi-user.target
-          enabled: true
-          name: set-disk-rotational.service
+          path: /etc/udev/rules.d/99-disable-rotational.rules
+  osImageURL: ""
 EOF
 ```
 
-4. Apply it:
+3. Apply it:
 ```
 oc apply -f hdd-disks-workaround.yaml
 ```
