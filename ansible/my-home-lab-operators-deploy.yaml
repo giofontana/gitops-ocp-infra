@@ -1,8 +1,0 @@
----
-- import_playbook: playbooks/deploy-local-volume.yaml
-  tags:
-    - local-volume
-
-- import_playbook: playbooks/deploy-odf.yaml
-  tags:
-    - odf

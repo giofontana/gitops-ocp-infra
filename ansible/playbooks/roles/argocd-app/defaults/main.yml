@@ -1,4 +1,0 @@
----
-# defaults file for argocd-app
-argocd_namespace: "openshift-gitops"
-num_retries: 20
