@@ -1,4 +1,4 @@
-# Workaround for ODF to work with HDD disks. Only works with:
+# Workaround for ODF to work with HDD disks.
 
 1. Change the script below setting the appropriate ODF node names and disks wwn:
 
