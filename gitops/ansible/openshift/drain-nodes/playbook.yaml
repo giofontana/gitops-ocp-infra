@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Get node list
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Node
+      register: node_info
+    - name: Show node names
+      debug:
+        msg: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
+
+    - name: Drain nodes
+      kubernetes.core.k8s_drain:
+        state: drain
+        name: "{{ item }}"
+        delete_options:
+          ignore_daemonsets: true
+          delete_emptydir_data: true
+          force: true
+          disable_eviction: true
+      loop: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
+      ignore_errors: true
