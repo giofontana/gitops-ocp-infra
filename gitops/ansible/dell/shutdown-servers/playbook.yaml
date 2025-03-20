@@ -15,7 +15,7 @@
 
     - name: "Wait 15 mins and force shutdown servers"
       pause:
-        minutes: 1
+        minutes: 15
 
     - name: "Performing force shutdown operation"
       dellemc.openmanage.redfish_powerstate:
