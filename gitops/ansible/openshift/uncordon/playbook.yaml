@@ -10,8 +10,8 @@
       kubernetes.core.k8s_info:
         api_version: v1
         kind: Node
-      register: output
-      until: output.rc == 0
+      register: node_info
+      until: node_info.resources is defined
       retries: 20
       delay: 60      
 
