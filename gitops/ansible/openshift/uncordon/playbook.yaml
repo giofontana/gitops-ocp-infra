@@ -15,16 +15,14 @@
       retries: 20
       delay: 60      
 
-    - name: Pause for 1 minute to wait for API and OCP accepts commands properly
-      ansible.builtin.pause:
-        minutes: 1
+#    - name: Pause for 1 minute to wait for API and OCP accepts commands properly
+#      ansible.builtin.pause:
+#        minutes: 1
 
     - name: Mark nodes as schedulable.
       kubernetes.core.k8s_drain:
         state: uncordon
         name: "{{ item }}"
-      register: api_check
-      until: api_check.resources is defined
       retries: 20
       delay: 60
       loop: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
