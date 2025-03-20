@@ -23,8 +23,8 @@
       kubernetes.core.k8s_drain:
         state: uncordon
         name: "{{ item }}"
-      register: output
-      until: output.rc == 0
+      register: api_check
+      until: api_check.resources is defined
       retries: 20
       delay: 60
       loop: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
