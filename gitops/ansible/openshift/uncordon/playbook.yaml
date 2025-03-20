@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Checking OCP API is up
+      shell: "oc get nodes"
+      register: output
+      until: output.rc == 0
+      retries: 20
+      delay: 60
+
+    - name: Pause for 1 minute to wait for API and OCP accepts commands properly
+      ansible.builtin.pause:
+        minutes: 1
+
+    - name: Mark nodes as schedulable.
+      shell: "oc adm uncordon {{ item }}"
+      register: output
+      until: output.rc == 0
+      retries: 20
+      delay: 60
+      loop: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
+
+    - name: Wait for cluster to be health
+      shell: "oc get clusterversion version -o 'jsonpath={..status.conditions[?(@.type==\"Available\")].status}'"
+      register: output
+      until: output.stdout == "True"
+      retries: 20
+      delay: 60
