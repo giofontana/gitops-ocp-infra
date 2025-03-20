@@ -5,28 +5,45 @@
     - kubernetes.core
 
   tasks:
-    - name: Checking OCP API is up
-      shell: "oc get nodes"
+
+    - name: Get node list
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Node
       register: output
       until: output.rc == 0
       retries: 20
-      delay: 60
+      delay: 60      
 
     - name: Pause for 1 minute to wait for API and OCP accepts commands properly
       ansible.builtin.pause:
         minutes: 1
 
     - name: Mark nodes as schedulable.
-      shell: "oc adm uncordon {{ item }}"
+      kubernetes.core.k8s_drain:
+        state: uncordon
+        name: "{{ item }}"
       register: output
       until: output.rc == 0
       retries: 20
       delay: 60
       loop: "{{ node_info.resources | map(attribute='metadata.name') | list }}"
 
-    - name: Wait for cluster to be health
-      shell: "oc get clusterversion version -o 'jsonpath={..status.conditions[?(@.type==\"Available\")].status}'"
-      register: output
-      until: output.stdout == "True"
+#    - name: Wait for cluster to be health
+#      shell: "oc get clusterversion version -o 'jsonpath={..status.conditions[?(@.type==\"Available\")].status}'"
+#      register: output
+#      until: output.stdout == "True"
+#      retries: 20
+#      delay: 60
+
+    - name: Wait for cluster to be healthy
+      kubernetes.core.k8s_info:
+        api_version: config.openshift.io/v1
+        kind: ClusterVersion
+        name: version
+      register: cluster_version
       retries: 20
       delay: 60
+      until: >-
+        cluster_version.resources[0].status.conditions | selectattr('type', 'equalto', 'Available') | map(attribute='status') | first == "True"
+
