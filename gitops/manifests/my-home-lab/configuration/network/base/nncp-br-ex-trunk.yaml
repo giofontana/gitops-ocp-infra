@@ -1,14 +1,11 @@
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
-  name: br-ex-localnets
+  name: trunk
 spec:
   desiredState:
     ovn:
       bridge-mappings:
         - bridge: br-ex
-          localnet: localnet-vlan1
-          state: present      
-        - bridge: br-ex
-          localnet: localnet-vlan4
+          localnet: trunk
           state: present
