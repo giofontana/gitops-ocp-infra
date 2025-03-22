@@ -15,9 +15,9 @@ spec:
           - key: kubernetes.io/hostname
             operator: In
             values:
-              - bart
-              - homer
-              - marge
+              - bart.simpsons.lab.gfontana.me
+              - homer.simpsons.lab.gfontana.me
+              - marge.simpsons.lab.gfontana.me
   storageClassName: localdisks
   tolerations:
     - effect: NoSchedule

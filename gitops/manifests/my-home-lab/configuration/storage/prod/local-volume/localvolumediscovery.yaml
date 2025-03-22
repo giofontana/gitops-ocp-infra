@@ -10,6 +10,6 @@ spec:
           - key: kubernetes.io/hostname
             operator: In
             values:
-              - marge
-              - bart
-              - homer
+              - marge.simpsons.lab.gfontana.me
+              - bart.simpsons.lab.gfontana.me
+              - homer.simpsons.lab.gfontana.me
