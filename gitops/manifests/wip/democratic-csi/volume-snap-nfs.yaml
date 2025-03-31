@@ -1,0 +1,11 @@
+apiVersion: snapshot.storage.k8s.io/v1
+deletionPolicy: Retain
+driver: org.democratic-csi.nfs
+kind: VolumeSnapshotClass
+metadata:
+  annotations:
+    snapshot.storage.kubernetes.io/is-default-class: "false"
+  labels:
+    snapshotter: org.democratic-csi.nfs
+    velero.io/csi-volumesnapshot-class: "true"
+  name: truenas-nfs-nonroot-snapclass
