@@ -21,7 +21,14 @@ helm upgrade \
 --namespace democratic-csi \
 zfs-nfs democratic-csi/democratic-csi
 
-oc patch storageprofile truenas-nfs-nonroot -p '{"spec":{"claimPropertySets":[{"accessModes":["ReadWriteMany"],"volumeMode":"Filesystem"}],"cloneStrategy":"csi-snapshot","dataImportCronSourceFormat":"snapshot","provisioner":"org.democratic-csi.nfs","storageClass":"truenas-nfs-csi"}}' --type=merge
+oc patch storageprofile truenas-nfs-csi -p '{"spec":{"claimPropertySets":[{"accessModes":["ReadWriteMany"],"volumeMode":"Filesystem"}],"cloneStrategy":"csi-snapshot","dataImportCronSourceFormat":"snapshot","provisioner":"org.democratic-csi.nfs","storageClass":"truenas-nfs-csi"}}' --type=merge
 
-oc patch storageprofile truenas-iscsi-nonroot -p '{"spec":{"claimPropertySets":[{"accessModes":["ReadWriteMany"],"volumeMode":"Block"},{"accessModes":["ReadWriteOnce"],"volumeMode":"Block"},{"accessModes":["ReadWriteOnce"],"volumeMode":"Filesystem"}],"cloneStrategy":"csi-snapshot","dataImportCronSourceFormat":"snapshot"}}' --type=merge
+oc patch storageprofile truenas-iscsi-csi -p '{"spec":{"claimPropertySets":[{"accessModes":["ReadWriteMany"],"volumeMode":"Block"},{"accessModes":["ReadWriteOnce"],"volumeMode":"Block"},{"accessModes":["ReadWriteOnce"],"volumeMode":"Filesystem"}],"cloneStrategy":"csi-clone","dataImportCronSourceFormat":"snapshot"}}' --type=merge
+
+helm repo add democratic-csi https://democratic-csi.github.io/charts/
+helm repo update
+
+helm upgrade --install --namespace kube-system --create-namespace snapshot-controller democratic-csi/snapshot-controller
+kubectl -n kube-system logs -f -l app=snapshot-controller
+
 ```

@@ -4,7 +4,7 @@ csiDriver:
 
 # add note here about volume expansion requirements
 storageClasses:
-- name: truenas-nfs-nonroot
+- name: truenas-nfs-csi
   defaultClass: false
   reclaimPolicy: Delete
   volumeBindingMode: Immediate
@@ -13,14 +13,14 @@ storageClasses:
     # for block-based storage can be ext3, ext4, xfs
     # for nfs should be nfs
     fsType: nfs
-      
+
     # if true, volumes created from other snapshots will be
     # zfs send/received instead of zfs cloned
-    # detachedVolumesFromSnapshots: "false"
-    
+    detachedVolumesFromSnapshots: "true"
+
     # if true, volumes created from other volumes will be
     # zfs send/received instead of zfs cloned
-    # detachedVolumesFromVolumes: "false"
+    detachedVolumesFromVolumes: "true"
 
   mountOptions:
   - noatime
@@ -33,11 +33,11 @@ storageClasses:
     controller-expand-secret:
 
 # if your cluster supports snapshots you may enable below
-volumeSnapshotClasses: []
-#- name: truenas-nfs-csi
-#  parameters:
+volumeSnapshotClasses:
+- name: truenas-nfs-csi-snapclass
+  parameters:
 #  # if true, snapshots will be created with zfs send/receive
-#  # detachedSnapshots: "false"
+    detachedSnapshots: "true"
 #  secrets:
 #    snapshotter-secret:
 
@@ -47,20 +47,20 @@ driver:
     instance_id:
     httpConnection:
       protocol: https
-      host: tnas01.cudanet.org
+      host: **********
       port: 443
-      apiKey: <your-api-key> 
-      username: admin
+      apiKey: 2-*********
+      username: k8s
       allowInsecure: true
     sshConnection:
-      host: 192.168.10.190
+      host: *********
       port: 22
-      username: admin
+      username: k8s
       privateKey: |
         -----BEGIN OPENSSH PRIVATE KEY-----
-        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
-...
-        hlA+2q2t2yzk3RAAAAC3Jvb3RAdG5hczAxAQIDBAUGBw==
+        b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+        *********************************
+        I+kwEkI10gZ4/wD9Cg6PAAAAHWdmb250YW5hQGdmb250YW5hLXdvcmtzdGF0aW9u
         -----END OPENSSH PRIVATE KEY-----
     zfs:
       cli:
@@ -70,15 +70,15 @@ driver:
           zpool: /usr/sbin/zpool
           sudo: /usr/bin/sudo
           chroot: /usr/sbin/chroot
-      datasetParentName: pool0/csi/vols
-      detachedSnapshotsDatasetParentName: pool0/csi/snaps
+      datasetParentName: pool0/k8s/vols
+      detachedSnapshotsDatasetParentName: pool0/k8s/snaps
       datasetEnableQuotas: true
       datasetEnableReservation: false
       datasetPermissionsMode: "0777"
       datasetPermissionsUser: 0
       datasetPermissionsGroup: 0
     nfs:
-      shareHost: 192.168.10.190
+      shareHost: ***********
       shareAlldirs: false
       shareAllowedHosts: []
       shareAllowedNetworks: []
