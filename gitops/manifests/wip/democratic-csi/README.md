@@ -2,8 +2,8 @@
 ```
 oc new-project democratic-csi
 oc label --overwrite namespace democratic-csi pod-security.kubernetes.io/enforce=privileged
-oc adm policy add-scc-to-user -z zfs-nfs-democratic-csi-node-sa priviledged
 oc adm policy add-scc-to-user -z zfs-nfs-democratic-csi-node-sa privileged
+oc adm policy add-scc-to-user -z zfs-iscsi-democratic-csi-node-sa privileged
 
 helm repo add democratic-csi https://democratic-csi.github.io/charts/
 helm repo update
