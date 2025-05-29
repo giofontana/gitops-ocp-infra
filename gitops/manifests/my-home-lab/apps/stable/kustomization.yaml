@@ -14,9 +14,3 @@ resources:
   - configure-auth.yaml
   - openshift-monitoring-persistence.yaml
   - openshift-image-registry.yaml
-  - openshift-logging-loki-operator.yaml
-  - openshift-logging-loki-configuration.yaml
-  - cluster-observability-operator.yaml
-  - cluster-observability-instances.yaml
-  - netobserv-operator.yaml
-  - netobserv-loki-configuration.yaml
