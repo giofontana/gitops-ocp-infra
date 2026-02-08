@@ -1,0 +1,82 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: anythingllm
+  namespace: anythingllm
+  labels:
+    app: anythingllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      statefulset: anythingllm
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: anythingllm
+        statefulset: anythingllm
+    spec:
+      restartPolicy: Always
+      serviceAccountName: anythingllm-sa
+      securityContext:
+        runAsUser: 0
+        fsGroup: 0      
+      containers:
+        - resources:
+            limits:
+              cpu: '2'
+              memory: 4Gi
+            requests:
+              cpu: '2'
+              memory: 4Gi
+          name: anythingllm
+          env:
+            - name: STORAGE_DIR
+              value: "/app/server/storage"
+            - name: COMMUNITY_HUB_BUNDLE_DOWNLOADS_ENABLED
+              value: allow_all
+            - name: LLM_PROVIDER
+              value: 'generic-openai'
+            - name: GENERIC_OPEN_AI_BASE_PATH
+              value: 'https://qwenqwen3-vl-8b-thinking-fp8-llm-models.apps.simpsons.lab.gfontana.me/v1'
+            - name: GENERIC_OPEN_AI_MODEL_PREF
+              value: 'Qwen/Qwen3-VL-8B-Thinking-FP8'
+            - name: GENERIC_OPEN_AI_MODEL_TOKEN_LIMIT
+              value: '4096'
+            - name: GENERIC_OPEN_AI_API_KEY
+              value: '1234'
+            - name: GENERIC_OPEN_AI_MAX_TOKENS
+              value: '4096'
+            - name: EMBEDDING_ENGINE
+              value: 'native'
+            - name: VECTOR_DB
+              value: 'lancedb'
+            - name: SERVER_PORT
+              value: '3001'
+          ports:
+            - name: notebook-port
+              containerPort: 3001
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: anythingllm-pvc
+              mountPath: /app/server/storage
+            - name: shm
+              mountPath: /dev/shm
+          terminationMessagePolicy: File
+          image: 'mintplexlabs/anythingllm:latest'
+      serviceAccount: default
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+        - name: anythingllm-pvc
+          persistentVolumeClaim:
+            claimName: anythingllm-pvc
+      dnsPolicy: ClusterFirst
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  revisionHistoryLimit: 10
