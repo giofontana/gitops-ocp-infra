@@ -1,9 +1,0 @@
-apiVersion: console.openshift.io/v1
-kind: ConsoleNotification
-metadata:
-  name: clustername
-spec:
-  backgroundColor: green
-  color: white
-  location: BannerTop
-  text: OCP GFONTANA LAB
