@@ -1,0 +1,567 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    opendatahub.io/connection-path: qwen3-vl-8b-instruct-fp8
+    opendatahub.io/connections: llm-models
+    opendatahub.io/hardware-profile-name: default-profile-nvidia-gpu
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/model-type: generative
+    openshift.io/description: ""
+    openshift.io/display-name: Qwen/Qwen3-VL-8B-Instruct-FP8
+    security.opendatahub.io/enable-auth: "false"
+    serving.kserve.io/deploymentMode: RawDeployment
+    serving.kserve.io/stop: "false"
+  labels:
+    networking.kserve.io/visibility: exposed
+    opendatahub.io/dashboard: "true"
+  name: qwenqwen3-vl-8b-instruct-fp8
+  namespace: llm-models
+spec:
+  predictor:
+    automountServiceAccountToken: false
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+      - --max-model-len=30000
+      - --served-model-name=Qwen/Qwen3-VL-8B-Instruct-FP8
+      - --enable-auto-tool-choice
+      - --tool-call-parser=llama3_json
+      modelFormat:
+        name: vLLM
+      name: ""
+      resources:
+        limits:
+          cpu: "2"
+          memory: 4Gi
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "2"
+          memory: 4Gi
+          nvidia.com/gpu: "1"
+      runtime: qwenqwen3-vl-8b-instruct-fp8
+      storage:
+        key: llm-models
+        path: qwen3-vl-8b-instruct-fp8
+    nodeSelector:
+      gpu: "true"
+    serviceAccountName: llm-models-sa
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    opendatahub.io/connection-path: sdxl
+    opendatahub.io/connections: secret-text-to-image-gen-v2.1
+    opendatahub.io/hardware-profile-name: default-profile-nvidia-gpu
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/model-type: generative
+    openshift.io/description: ""
+    openshift.io/display-name: sdxl
+    security.opendatahub.io/enable-auth: "false"
+    serving.kserve.io/deploymentMode: RawDeployment
+    serving.kserve.io/stop: "true"
+  labels:
+    networking.kserve.io/visibility: exposed
+    opendatahub.io/dashboard: "true"
+  name: sdxl
+  namespace: llm-models
+spec:
+  predictor:
+    automountServiceAccountToken: false
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+      - --device=cuda
+      modelFormat:
+        name: sdxl
+      name: ""
+      resources:
+        limits:
+          cpu: "200"
+          memory: 400Gi
+          nvidia.com/gpu: "1"
+        requests:
+          cpu: "2"
+          memory: 4Gi
+          nvidia.com/gpu: "1"
+      runtime: kserve-sdxl
+      storageUri: pvc://text-to-image-model/model
+    nodeSelector:
+      gpu: "true"
+    serviceAccountName: llm-models-sa
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-creator: gfontana@redhat.com
+    opendatahub.io/notebook-image-desc: ""
+    opendatahub.io/notebook-image-name: sdxl-ministudio
+    opendatahub.io/notebook-image-url: quay.io/rh-aiservices-bu/sdxl-ministudio
+    opendatahub.io/recommended-accelerators: '[]'
+  labels:
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/notebook-image: "true"
+  name: sdxl-ministudio
+  namespace: redhat-ods-applications
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+  - annotations:
+      opendatahub.io/notebook-python-dependencies: '[]'
+      opendatahub.io/notebook-software: '[]'
+      openshift.io/imported-from: quay.io/rh-aiservices-bu/sdxl-ministudio
+    from:
+      kind: DockerImage
+      name: quay.io/rh-aiservices-bu/sdxl-ministudio
+    generation: 2
+    importPolicy:
+      importMode: Legacy
+    name: latest
+    referencePolicy:
+      type: Source
+---
+apiVersion: infrastructure.opendatahub.io/v1
+kind: HardwareProfile
+metadata:
+  annotations:
+    opendatahub.io/dashboard-feature-visibility: '[]'
+    opendatahub.io/disabled: 'false'
+    opendatahub.io/display-name: default-profile-nvidia-gpu
+  name: default-profile-nvidia-gpu
+  namespace: redhat-ods-applications
+spec:
+  identifiers:
+    - defaultCount: 2
+      displayName: CPU
+      identifier: cpu
+      minCount: 1
+      resourceType: CPU
+    - defaultCount: 4Gi
+      displayName: Memory
+      identifier: memory
+      minCount: 2Gi
+      resourceType: Memory
+    - defaultCount: 1
+      displayName: GPU
+      identifier: nvidia.com/gpu
+      minCount: 1
+  scheduling:
+    node:
+      nodeSelector:
+        gpu: 'true'
+      tolerations: []
+    type: Node
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/model-type: '["generative"]'
+    opendatahub.io/modelServingSupport: '["single"]'
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: template-pdmjm8
+  namespace: redhat-ods-applications
+objects:
+- apiVersion: serving.kserve.io/v1alpha1
+  kind: ServingRuntime
+  metadata:
+    annotations:
+      opendatahub.io/apiProtocol: REST
+      opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+      openshift.io/display-name: Custom - vLLM ServingRuntime - RTX3090
+    labels:
+      opendatahub.io/dashboard: "true"
+    name: vllm-runtime-rtx3090
+  spec:
+    annotations:
+      opendatahub.io/kserve-runtime: vllm
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8080"
+    containers:
+    - args:
+      - --model=/mnt/models/
+      - --port=8080
+      - --served-model-name={{.Name}}
+      command:
+      - python
+      - -m
+      - vllm.entrypoints.openai.api_server
+      env:
+      - name: HF_HOME
+        value: /tmp/hf_home
+      image: registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.2.5
+      name: kserve-container
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+    multiModel: false
+    supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+---
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  annotations:
+    notebooks.opendatahub.io/inject-auth: "true"
+    notebooks.opendatahub.io/last-image-selection: sdxl-ministudio:latest
+    notebooks.opendatahub.io/last-image-version-git-commit-selection: ""
+    notebooks.opendatahub.io/last-size-selection: ""
+    opendatahub.io/accelerator-name: ""
+    opendatahub.io/accelerator-profile-namespace: ""
+    opendatahub.io/connections: ""
+    opendatahub.io/hardware-profile-name: default-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/hardware-profile-resource-version: "21238754"
+    opendatahub.io/image-display-name: sdxl-ministudio
+    opendatahub.io/username: gfontana@redhat.com
+    opendatahub.io/workbench-image-namespace: ""
+    openshift.io/description: ""
+    openshift.io/display-name: sdxl
+  labels:
+    app: sdxl
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/odh-managed: "true"
+    opendatahub.io/user: gfontana-40redhat-2ecom
+  name: sdxl
+  namespace: llm-models
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: NOTEBOOK_ARGS
+          value: |-
+            --ServerApp.port=8888
+                              --ServerApp.token=''
+                              --ServerApp.password=''
+                              --ServerApp.base_url=/notebook/llm-models/sdxl
+                              --ServerApp.quit_button=False
+        - name: JUPYTER_IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/sdxl-ministudio:latest
+        - name: PIP_CERT
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: REQUESTS_CA_BUNDLE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: SSL_CERT_FILE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: KF_PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: GIT_SSL_CAINFO
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        envFrom:
+        - configMapRef:
+            name: configmap-ku0rhf
+        image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/sdxl-ministudio:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/sdxl/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: sdxl
+        ports:
+        - containerPort: 8888
+          name: notebook-port
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/sdxl/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /opt/app-root/src/
+          name: sdxl-storage
+        - mountPath: /dev/shm
+          name: shm
+        - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+          name: trusted-ca
+          readOnly: true
+          subPath: ca-bundle.crt
+        - mountPath: /opt/app-root/pipeline-runtimes/
+          name: runtime-images
+        workingDir: /opt/app-root/src
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8888/
+        - --logtostderr=true
+        - --v=10
+        - --proxy-endpoints-port=8444
+        - --config-file=/etc/kube-rbac-proxy/config-file.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --auth-header-fields-enabled=true
+        - --auth-header-user-field-name=X-Auth-Request-User
+        - --auth-header-groups-field-name=X-Auth-Request-Groups
+        image: registry.redhat.io/rhoai/odh-kube-auth-proxy-rhel9@sha256:657bc0b43fe2da3211d80dc5085f57dccb451c30b1a254b87b4876745c414d36
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: kube-rbac-proxy
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - mountPath: /etc/kube-rbac-proxy
+          name: kube-rbac-proxy-config
+        - mountPath: /etc/tls/private
+          name: kube-rbac-proxy-tls-certificates
+      enableServiceLinks: false
+      serviceAccountName: sdxl
+      volumes:
+      - name: sdxl-storage
+        persistentVolumeClaim:
+          claimName: sdxl-storage
+      - emptyDir:
+          medium: Memory
+        name: shm
+      - configMap:
+          items:
+          - key: ca-bundle.crt
+            path: ca-bundle.crt
+          name: workbench-trusted-ca-bundle
+          optional: true
+        name: trusted-ca
+      - configMap:
+          name: pipeline-runtime-images
+          optional: true
+        name: runtime-images
+      - configMap:
+          defaultMode: 420
+          name: sdxl-kube-rbac-proxy-config
+        name: kube-rbac-proxy-config
+      - name: kube-rbac-proxy-tls-certificates
+        secret:
+          defaultMode: 420
+          secretName: sdxl-kube-rbac-proxy-tls
+---
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  annotations:
+    notebooks.opendatahub.io/inject-auth: "true"
+    notebooks.opendatahub.io/last-image-selection: s2i-minimal-notebook:2025.2
+    notebooks.opendatahub.io/last-image-version-git-commit-selection: d3137ca
+    notebooks.opendatahub.io/last-size-selection: ""
+    opendatahub.io/accelerator-name: ""
+    opendatahub.io/accelerator-profile-namespace: ""
+    opendatahub.io/connections: ""
+    opendatahub.io/hardware-profile-name: default-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/hardware-profile-resource-version: "21238754"
+    opendatahub.io/image-display-name: Jupyter | Minimal | CPU | Python 3.12
+    opendatahub.io/username: gfontana@redhat.com
+    opendatahub.io/workbench-image-namespace: ""
+    openshift.io/description: ""
+    openshift.io/display-name: workbench
+  labels:
+    app: workbench
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/odh-managed: "true"
+    opendatahub.io/user: gfontana-40redhat-2ecom
+  name: workbench
+  namespace: llm-models
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: NOTEBOOK_ARGS
+          value: |-
+            --ServerApp.port=8888
+                              --ServerApp.token=''
+                              --ServerApp.password=''
+                              --ServerApp.base_url=/notebook/llm-models/workbench
+                              --ServerApp.quit_button=False
+        - name: JUPYTER_IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2025.2
+        - name: PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: KF_PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: GIT_SSL_CAINFO
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: PIP_CERT
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: REQUESTS_CA_BUNDLE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: SSL_CERT_FILE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2025.2
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/workbench/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: workbench
+        ports:
+        - containerPort: 8888
+          name: notebook-port
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/workbench/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /opt/app-root/src/
+          name: text-to-image-model
+        - mountPath: /dev/shm
+          name: shm
+        - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+          name: trusted-ca
+          readOnly: true
+          subPath: ca-bundle.crt
+        - mountPath: /opt/app-root/pipeline-runtimes/
+          name: runtime-images
+        workingDir: /opt/app-root/src
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8888/
+        - --logtostderr=true
+        - --v=10
+        - --proxy-endpoints-port=8444
+        - --config-file=/etc/kube-rbac-proxy/config-file.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --auth-header-fields-enabled=true
+        - --auth-header-user-field-name=X-Auth-Request-User
+        - --auth-header-groups-field-name=X-Auth-Request-Groups
+        image: registry.redhat.io/rhoai/odh-kube-auth-proxy-rhel9@sha256:657bc0b43fe2da3211d80dc5085f57dccb451c30b1a254b87b4876745c414d36
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: kube-rbac-proxy
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - mountPath: /etc/kube-rbac-proxy
+          name: kube-rbac-proxy-config
+        - mountPath: /etc/tls/private
+          name: kube-rbac-proxy-tls-certificates
+      enableServiceLinks: false
+      serviceAccountName: workbench
+      volumes:
+      - name: text-to-image-model
+        persistentVolumeClaim:
+          claimName: text-to-image-model
+      - emptyDir:
+          medium: Memory
+        name: shm
+      - configMap:
+          items:
+          - key: ca-bundle.crt
+            path: ca-bundle.crt
+          name: workbench-trusted-ca-bundle
+          optional: true
+        name: trusted-ca
+      - configMap:
+          name: pipeline-runtime-images
+          optional: true
+        name: runtime-images
+      - configMap:
+          defaultMode: 420
+          name: workbench-kube-rbac-proxy-config
+        name: kube-rbac-proxy-config
+      - name: kube-rbac-proxy-tls-certificates
+        secret:
+          defaultMode: 420
+          secretName: workbench-kube-rbac-proxy-tls

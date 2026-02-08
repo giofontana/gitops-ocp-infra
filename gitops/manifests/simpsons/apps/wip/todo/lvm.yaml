@@ -1,0 +1,39 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: lvms-operator
+  namespace: openshift-lvm-storage
+spec:
+  channel: stable-4.20
+  installPlanApproval: Automatic
+  name: lvms-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: lvms-operator.v4.20.0
+---
+apiVersion: lvm.topolvm.io/v1alpha1
+kind: LVMCluster
+metadata:
+  name: lvmcluster
+  namespace: openshift-lvm-storage
+spec:
+  storage:
+    deviceClasses:
+      - deviceSelector:
+          paths:
+            - /dev/disk/by-id/wwn-0x61866da062ba8a002e9c435a0f77c154
+        fstype: xfs
+        name: homer-localdisks
+        nodeSelector:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - homer
+        thinPoolConfig:
+          chunkSizeCalculationPolicy: Static
+          metadataSizeCalculationPolicy: Host
+          name: thin-pool
+          overprovisionRatio: 10
+          sizePercent: 90

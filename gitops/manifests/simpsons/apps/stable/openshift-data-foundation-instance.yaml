@@ -1,8 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-of-apps-stable
-  namespace: openshift-gitops
+  name: openshift-data-foundation-instance
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -14,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/my-home-lab/apps/stable
+    path: gitops/manifests/my-home-lab/configuration/storage/prod/openshift-data-foundation
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

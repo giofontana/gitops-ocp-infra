@@ -1,0 +1,136 @@
+# Subs
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  labels:
+    operators.coreos.com/gpu-operator-certified.nvidia-gpu-operator: ''
+  name: gpu-operator-certified
+  namespace: nvidia-gpu-operator
+spec:
+  channel: v25.10
+  installPlanApproval: Automatic
+  name: gpu-operator-certified
+  source: certified-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: gpu-operator-certified.v25.10.0
+
+# Time Slicing CM
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: time-slicing-config
+  namespace: nvidia-gpu-operator
+data:
+  rtx3090: |-
+    version: v1
+    sharing:
+      timeSlicing:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 40
+
+# GPU Cluster Policy
+
+apiVersion: nvidia.com/v1
+kind: ClusterPolicy
+metadata:
+  name: gpu-cluster-policy
+spec:
+  vgpuDeviceManager:
+    config:
+      default: default
+    enabled: true
+  migManager:
+    config:
+      default: all-disabled
+      name: default-mig-parted-config
+    enabled: true
+  operator:
+    defaultRuntime: crio
+    initContainer: {}
+    runtimeClass: nvidia
+    use_ocp_driver_toolkit: true
+  dcgm:
+    enabled: true
+  gfd:
+    enabled: true
+  dcgmExporter:
+    config:
+      name: ''
+    enabled: false
+    serviceMonitor:
+      enabled: true
+  cdi:
+    default: false
+    enabled: true
+  driver:
+    licensingConfig:
+      nlsEnabled: true
+      secretName: ''
+    enabled: true
+    kernelModuleType: auto
+    certConfig:
+      name: ''
+    useNvidiaDriverCRD: false
+    kernelModuleConfig:
+      name: ''
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: false
+        enable: false
+        force: false
+        timeoutSeconds: 300
+      maxParallelUpgrades: 1
+      maxUnavailable: 25%
+      podDeletion:
+        deleteEmptyDir: false
+        force: false
+        timeoutSeconds: 300
+      waitForCompletion:
+        timeoutSeconds: 0
+    repoConfig:
+      configMapName: ''
+    virtualTopology:
+      config: ''
+  devicePlugin:
+    config:
+      default: rtx3090
+      name: time-slicing-config
+    enabled: true
+    mps:
+      root: /run/nvidia/mps
+  gdrcopy:
+    enabled: false
+  kataManager:
+    config:
+      artifactsDir: /opt/nvidia-gpu-operator/artifacts/runtimeclasses
+  mig:
+    strategy: single
+  sandboxDevicePlugin:
+    enabled: true
+  validator:
+    plugin:
+      env: []
+  nodeStatusExporter:
+    enabled: true
+  daemonsets:
+    rollingUpdate:
+      maxUnavailable: '1'
+    updateStrategy: RollingUpdate
+  sandboxWorkloads:
+    defaultWorkload: container
+    enabled: false
+  gds:
+    enabled: false
+  vgpuManager:
+    enabled: false
+  vfioManager:
+    enabled: true
+  toolkit:
+    enabled: true
+    installDir: /usr/local/nvidia
+
+

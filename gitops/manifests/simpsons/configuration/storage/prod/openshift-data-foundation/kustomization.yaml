@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+#  - storagesystem.yaml
+  - hdd-disks-workaround-master.yaml
+  - hdd-disks-workaround-worker.yaml
+  - storagecluster.yaml
+  - ocsinitialization.yaml

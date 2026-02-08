@@ -1,0 +1,7 @@
+apiVersion: observability.openshift.io/v1alpha1
+kind: UIPlugin
+metadata:
+  managedFields:
+  name: troubleshooting-panel
+spec:
+  type: TroubleshootingPanel

@@ -1,0 +1,20 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+    - name: htpasswd-auth
+      mappingMethod: claim 
+      type: HTPasswd
+      htpasswd:
+        fileData:
+          name: htpass-secret
+    - google:
+        clientID: 101969444975-lfcib2cdmocpr5fisddorvkmc4nrst6g.apps.googleusercontent.com
+        clientSecret:
+          name: google-secret
+        hostedDomain: redhat.com
+      mappingMethod: claim
+      name: RedHatSSO
+      type: Google        

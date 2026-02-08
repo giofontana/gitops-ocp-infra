@@ -1,0 +1,51 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: lightspeed-operator
+  namespace: openshift-lightspeed
+spec:
+  channel: stable
+  installPlanApproval: Automatic
+  name: lightspeed-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: lightspeed-operator.v1.0.8
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: rhoai-api-keys
+  namespace: openshift-lightspeed
+data:
+  apitoken: ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNkluZ3ROV1ZwUW5GZlpVOTFibnAxY1dsMlZWZHFiMkUzWmtkWWVGWk9aRTlJV1VJM1ozUk9OVVp2TldjaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUpzYkcwdGJXOWtaV3h6SWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXpaV055WlhRdWJtRnRaU0k2SW14c2JTMTBiMnRsYmkxeGQyVnVjWGRsYmpNdGRtd3RPR0l0YVc1emRISjFZM1F0Wm5BNExYTmhJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5OXpaWEoyYVdObFlXTmpiM1Z1ZEM5elpYSjJhV05sTFdGalkyOTFiblF1Ym1GdFpTSTZJbkYzWlc1eGQyVnVNeTEyYkMwNFlpMXBibk4wY25WamRDMW1jRGd0YzJFaUxDSnJkV0psY201bGRHVnpMbWx2TDNObGNuWnBZMlZoWTJOdmRXNTBMM05sY25acFkyVXRZV05qYjNWdWRDNTFhV1FpT2lKaVl6aGtNVE13WXkxbU56SXlMVFE1T0RndFlUTXdaaTAyTjJNeE5EZ3dObUU0TjJRaUxDSnpkV0lpT2lKemVYTjBaVzA2YzJWeWRtbGpaV0ZqWTI5MWJuUTZiR3h0TFcxdlpHVnNjenB4ZDJWdWNYZGxiak10ZG13dE9HSXRhVzV6ZEhKMVkzUXRabkE0TFhOaEluMC5talotazBZRTh4UDZEbEVhMmpfRnY5WFpLLWUzZWMyNlVLblNSTVY3S0Zoem11WUdQM0lPaGdFZ2FWaHNrMXl3b3lhaEU3aUJ5bW5NN00xZ0hidnR0d0pTemtYcTFkTUcxNzJLNzFQZVVRSkNxZUdGSUV5bml1b0l6R2xzaHNKUGl4X1AyRGF0WERrQjdMczFqekpsaUs5eFp6aGRvbHBub2hUZXFKcmpTUjFidWI2TlptMmNldV9RdDVaY0d1TERiY1lCR0tMX1VDbmxXUjFPZ19FeHlFWmxldkxPcEpKaUxnSmJnYkQwWklQQ2c2UFdjVGhIcUdGMk82ZDJ5eXBEd0Q4dHNrRTVxcGlIMXFsZTRUWF81aGtiNmlLQklEYXFHczloY3JYdVpQQmUyV3NFd2M4bXotZmVXZlBEdnFCUkt0SGxzRHVpblVQRk5LamhTM1hlZUtMMUU5YzlDZmFERDhUZGhwdk8zNVJlaXFWUEtPV0tDVWh4QUpNeFgwbkc0SFV5b2hPMVk0dENsT1Z5MFpxTEdhaVl5X0hCRUhTdncyWVJ6RnlvX2xVaVp3SkNyeFN2X050QmVqRGVxdHQxejNLcm9zZXZTVVU3cU5VamhaRkI2Q01mR3VvWFBsWE1yVlhEWTBFMzc3ek1wZzdmQlZ2ZW9TNk9mRnhnQmNxQ0lvMDRkSFFrbFRCNThqYU1INWhaek9aajh4VmZGTmZtNWt0eTJZQWJVdGZ1U2JrcVlwdzJxYkZzMDZvS0ZnS0ZFWHFpTUttVXV5LTBtM3hRMktvc1dJYVpJZm00aGhRM2VZcHhSTmxRckFyWXlQU1ljTWFkWFB5Z3dOLXNaa0hJc2xQWVl1aFpxYy1kNXY5d0lKY0s5ZkxYM1lwMkkzck9CaXV6dU1rMmVKTQ==
+type: Opaque
+---
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+spec:
+  llm:
+    providers:
+      - credentialsSecretRef:
+          name: rhoai-api-keys
+        models:
+          - name: Qwen/Qwen3-VL-8B-Instruct-FP8
+        name: red_hat_openshift_ai
+        type: rhoai_vllm
+        url: 'https://qwenqwen3-vl-8b-instruct-fp8-llm-models.apps.simpsons.lab.gfontana.me/v1'
+  ols:
+    conversationCache:
+      postgres:
+        maxConnections: 2000
+        sharedBuffers: 256MB
+      type: postgres
+    defaultModel: Qwen/Qwen3-VL-8B-Instruct-FP8
+    defaultProvider: red_hat_openshift_ai
+    deployment:
+      console:
+        replicas: 1
+      replicas: 1
+    logLevel: INFO
+  olsDataCollector:
+    logLevel: INFO

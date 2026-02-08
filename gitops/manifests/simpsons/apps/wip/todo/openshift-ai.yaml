@@ -1,0 +1,52 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: rhods-operator
+  namespace: redhat-ods-operator
+spec:
+  channel: fast-3.x
+  installPlanApproval: Automatic
+  name: rhods-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: rhods-operator.3.0.0
+---
+apiVersion: datasciencecluster.opendatahub.io/v2
+kind: DataScienceCluster
+metadata:
+  name: default-dsc
+spec:
+  components:
+    kserve:
+      managementState: Managed
+      nim:
+        managementState: Managed
+      rawDeploymentServiceConfig: Headless
+    modelregistry:
+      managementState: Managed
+      registriesNamespace: rhoai-model-registries
+    feastoperator:
+      managementState: Removed
+    trustyai:
+      eval:
+        lmeval:
+          permitCodeExecution: deny
+          permitOnline: deny
+      managementState: Managed
+    aipipelines:
+      managementState: Managed
+    ray:
+      managementState: Managed
+    kueue:
+      defaultClusterQueueName: default
+      defaultLocalQueueName: default
+      managementState: Removed
+    workbenches:
+      managementState: Managed
+      workbenchNamespace: rhods-notebooks
+    dashboard:
+      managementState: Managed
+    llamastackoperator:
+      managementState: Managed
+    trainingoperator:
+      managementState: Managed
