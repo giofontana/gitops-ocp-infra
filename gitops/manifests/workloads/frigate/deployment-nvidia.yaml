@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frigate
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      serviceAccountName: frigate-sa
+      securityContext:
+        runAsUser: 0
+        fsGroup: 0
+      containers:
+      - name: frigate
+        image: ghcr.io/blakeblackshear/frigate:stable-tensorrt
+        env:
+        - name: FRIGATE_RTSP_PASSWORD
+          value: "password"
+        ports:
+        - containerPort: 5000
+        - containerPort: 8971
+        - containerPort: 8554
+        - containerPort: 8555
+          protocol: TCP
+        - containerPort: 8555
+          protocol: UDP
+        - containerPort: 1935
+        - containerPort: 554
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+        - name: cache
+          mountPath: /tmp/cache
+        - name: dshm
+          mountPath: /dev/shm
+        - name: media-volume
+          mountPath: /media
+        - name: config-volume
+          mountPath: /config
+          subPath: config
+        - name: ssl-certs
+          mountPath: /etc/letsencrypt/live/frigate
+          readOnly: true
+      volumes:
+      - name: cache
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 384Mi
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: frigate-pvc
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: frigate-config-pvc
+      - name: ssl-certs
+        secret:
+          secretName: frigate-certs          

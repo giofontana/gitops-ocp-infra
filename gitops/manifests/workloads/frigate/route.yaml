@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: frigate-web
+  namespace: frigate
+spec:
+  host: frigate.gfontana.me
+  to:
+    kind: Service
+    name: frigate-service
+  port:
+    targetPort: http
+  tls:
+    termination: edge

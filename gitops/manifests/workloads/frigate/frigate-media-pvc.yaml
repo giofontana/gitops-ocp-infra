@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: frigate-pvc
+  namespace: frigate
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: frigate-data
+  storageClassName: no-provisioner
+  volumeMode: Filesystem

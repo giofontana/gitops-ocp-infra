@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate-service
+  namespace: frigate
+spec:
+  selector:
+    app: frigate
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+    - name: https-ui
+      port: 8971
+      targetPort: 8971
+    - name: rtsp
+      port: 8554
+      targetPort: 8554
+    - name: rtmp
+      port: 1935
+      targetPort: 1935
+    - name: webrtc-tcp
+      port: 8555
+      protocol: TCP
+      targetPort: 8555
+    - name: webrtc-udp
+      port: 8555
+      protocol: UDP
+      targetPort: 8555
