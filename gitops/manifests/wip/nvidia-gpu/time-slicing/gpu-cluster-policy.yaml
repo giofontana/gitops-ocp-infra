@@ -1,0 +1,12 @@
+apiVersion: nvidia.com/v1
+kind: ClusterPolicy
+metadata:
+  ...
+  name: gpu-cluster-policy
+spec:
+  ...
+  devicePlugin:
+    config:
+      default: rtx3090
+      name: time-slicing-config
+  ...

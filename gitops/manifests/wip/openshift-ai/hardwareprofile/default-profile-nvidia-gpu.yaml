@@ -1,0 +1,36 @@
+apiVersion: infrastructure.opendatahub.io/v1
+kind: HardwareProfile
+metadata:
+  annotations:
+    opendatahub.io/dashboard-feature-visibility: '[]'
+    opendatahub.io/disabled: 'false'
+    opendatahub.io/display-name: default-profile-nvidia-gpu
+    opendatahub.io/modified-date: '2025-12-16T22:11:25.685Z'
+  creationTimestamp: '2025-12-16T22:11:25Z'
+  generation: 1
+  name: default-profile-nvidia-gpu
+  namespace: redhat-ods-applications
+  resourceVersion: '21238491'
+  uid: 07170303-24f5-43a9-9e23-576a0b4296bf
+spec:
+  identifiers:
+    - defaultCount: 2
+      displayName: CPU
+      identifier: cpu
+      minCount: 1
+      resourceType: CPU
+    - defaultCount: 4Gi
+      displayName: Memory
+      identifier: memory
+      minCount: 2Gi
+      resourceType: Memory
+    - defaultCount: 1
+      displayName: GPU
+      identifier: nvidia.com/gpu
+      minCount: 1
+  scheduling:
+    node:
+      nodeSelector:
+        gpu: 'true'
+      tolerations: []
+    type: Node

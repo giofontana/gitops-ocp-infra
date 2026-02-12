@@ -1,0 +1,188 @@
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  annotations:
+    notebooks.opendatahub.io/inject-auth: "true"
+    notebooks.opendatahub.io/last-image-selection: sdxl-ministudio:latest
+    notebooks.opendatahub.io/last-image-version-git-commit-selection: ""
+    notebooks.opendatahub.io/last-size-selection: ""
+    opendatahub.io/accelerator-name: ""
+    opendatahub.io/accelerator-profile-namespace: ""
+    opendatahub.io/connections: ""
+    opendatahub.io/hardware-profile-name: default-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/hardware-profile-resource-version: "21238754"
+    opendatahub.io/image-display-name: sdxl-ministudio
+    opendatahub.io/username: gfontana@redhat.com
+    opendatahub.io/workbench-image-namespace: ""
+    openshift.io/description: ""
+    openshift.io/display-name: sdxl
+  creationTimestamp: "2026-01-14T22:05:09Z"
+  finalizers:
+  - notebook.opendatahub.io/httproute-cleanup
+  - notebook.opendatahub.io/referencegrant-cleanup
+  - notebook.opendatahub.io/kube-rbac-proxy-cleanup
+  generation: 1
+  labels:
+    app: sdxl
+    opendatahub.io/dashboard: "true"
+    opendatahub.io/odh-managed: "true"
+    opendatahub.io/user: gfontana-40redhat-2ecom
+  name: sdxl
+  namespace: llm-models
+  resourceVersion: "182159425"
+  uid: 86c81348-b5dc-4a9b-8f9c-574aa307032a
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: NOTEBOOK_ARGS
+          value: |-
+            --ServerApp.port=8888
+                              --ServerApp.token=''
+                              --ServerApp.password=''
+                              --ServerApp.base_url=/notebook/llm-models/sdxl
+                              --ServerApp.quit_button=False
+        - name: JUPYTER_IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/sdxl-ministudio:latest
+        - name: PIP_CERT
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: REQUESTS_CA_BUNDLE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: SSL_CERT_FILE
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: KF_PIPELINES_SSL_SA_CERTS
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        - name: GIT_SSL_CAINFO
+          value: /etc/pki/tls/custom-certs/ca-bundle.crt
+        envFrom:
+        - configMapRef:
+            name: configmap-ku0rhf
+        image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/sdxl-ministudio:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/sdxl/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: sdxl
+        ports:
+        - containerPort: 8888
+          name: notebook-port
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /notebook/llm-models/sdxl/api
+            port: notebook-port
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "2"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /opt/app-root/src/
+          name: sdxl-storage
+        - mountPath: /dev/shm
+          name: shm
+        - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+          name: trusted-ca
+          readOnly: true
+          subPath: ca-bundle.crt
+        - mountPath: /opt/app-root/pipeline-runtimes/
+          name: runtime-images
+        workingDir: /opt/app-root/src
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8888/
+        - --logtostderr=true
+        - --v=10
+        - --proxy-endpoints-port=8444
+        - --config-file=/etc/kube-rbac-proxy/config-file.yaml
+        - --tls-cert-file=/etc/tls/private/tls.crt
+        - --tls-private-key-file=/etc/tls/private/tls.key
+        - --auth-header-fields-enabled=true
+        - --auth-header-user-field-name=X-Auth-Request-User
+        - --auth-header-groups-field-name=X-Auth-Request-Groups
+        image: registry.redhat.io/rhoai/odh-kube-auth-proxy-rhel9@sha256:657bc0b43fe2da3211d80dc5085f57dccb451c30b1a254b87b4876745c414d36
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: kube-rbac-proxy
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8444
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - mountPath: /etc/kube-rbac-proxy
+          name: kube-rbac-proxy-config
+        - mountPath: /etc/tls/private
+          name: kube-rbac-proxy-tls-certificates
+      enableServiceLinks: false
+      serviceAccountName: sdxl
+      volumes:
+      - name: sdxl-storage
+        persistentVolumeClaim:
+          claimName: sdxl-storage
+      - emptyDir:
+          medium: Memory
+        name: shm
+      - configMap:
+          items:
+          - key: ca-bundle.crt
+            path: ca-bundle.crt
+          name: workbench-trusted-ca-bundle
+          optional: true
+        name: trusted-ca
+      - configMap:
+          name: pipeline-runtime-images
+          optional: true
+        name: runtime-images
+      - configMap:
+          defaultMode: 420
+          name: sdxl-kube-rbac-proxy-config
+        name: kube-rbac-proxy-config
+      - name: kube-rbac-proxy-tls-certificates
+        secret:
+          defaultMode: 420
+          secretName: sdxl-kube-rbac-proxy-tls

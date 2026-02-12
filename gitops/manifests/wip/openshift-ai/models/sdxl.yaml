@@ -1,0 +1,48 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/serving-runtime-scope: global
+    opendatahub.io/template-display-name: Kserve for SDXL
+    openshift.io/display-name: Kserve for SDXL
+  creationTimestamp: "2026-01-13T15:26:28Z"
+  generation: 7
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: kserve-sdxl
+  namespace: llm-models
+  resourceVersion: "98301872"
+  uid: 579b0cef-7732-4b17-b3e3-2e51e499e117
+spec:
+  annotations:
+    opendatahub.io/kserve-runtime: sdxl
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8080"
+  builtInAdapter:
+    modelLoadingTimeoutMillis: 90000
+  containers:
+  - args:
+    - --model_id=/mnt/models
+    - --http_port=8080
+    env:
+    - name: HF_HOME
+      value: /tmp/hf_home
+    image: quay.io/rh-aiservices-bu/kserve-sdxl:0.1.0
+    name: kserve-container
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    volumeMounts:
+    - mountPath: /dev/shm
+      name: shm
+  multiModel: false
+  supportedModelFormats:
+  - autoSelect: true
+    name: sdxl
+  volumes:
+  - emptyDir:
+      medium: Memory
+      sizeLimit: 2Gi
+    name: shm
