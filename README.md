@@ -7,13 +7,13 @@ This repo provides a gitops based implementation of my home lab using GitOps
 Sensitive secrets in this repo uses Bitnami Sealed Secrets. To install it run the following:
 
 ```
-oc create -k gitops/manifests/operators/openshift-gitops-operator/overlays/default
+oc create -k gitops/manifests/operators/sealed-secrets-operator/operator/overlays/default
 ```
 
 Then run the following script to replace SS key (key should be located in ~/.bitnami/sealed-secrets-secret.yaml of your workstation or bastion host):
 
 ```
-./gitops/manifests/operators/openshift-gitops-operator/scripts/replace-sealed-secrets-secret.sh
+./gitops/manifests/operators/sealed-secrets-operator/scripts/replace-sealed-secrets-secret.sh
 ```
 
 ### Provisioning
@@ -21,6 +21,7 @@ Clone this or user the raw files url if preferred, then assuming a fresh install
 
 ```
 oc create -k gitops/manifests/operators/openshift-gitops-operator/overlays/latest
+oc patch consoles.operator.openshift.io/cluster --type='merge' -p '{"spec":{"plugins":["gitops-plugin"]}}'
 ```
 
 Once the operator is installed, we use the App of Apps pattern to initiate the install of all other operators, including the creation of the pipeline and integration of ACS with the Internal Registry. Notice this might take a while to finish the sync and install everything.
