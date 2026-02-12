@@ -1,0 +1,92 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: patch-ingress-controller-job-sa-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - operator.openshift.io
+    resources:
+      - ingresscontrollers
+    verbs:
+      - get
+      - patch   
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: patch-ingress-controller-job-sa-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: patch-ingress-controller-job-sa-role
+subjects:
+  - kind: ServiceAccount
+    name: cli-job-sa
+    namespace: openshift-ingress-operator    
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cli-job-sa
+  namespace: openshift-ingress-operator
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: patch-ingress-controller
+  namespace: openshift-ingress-operator
+spec:
+  template:
+    spec:
+      containers:
+        - image: registry.redhat.io/openshift4/ose-cli:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              # Wait for secret ingress-cert to exist (up to 10 minutes)
+              TIMEOUT=600  # 10 minutes in seconds
+              INTERVAL=30  # Check every 30 seconds
+              ELAPSED=0
+              
+              echo "Checking if secret ingress-cert exists in openshift-ingress namespace..."
+              
+              while [ $ELAPSED -lt $TIMEOUT ]; do
+                if oc get secret ingress-cert -n openshift-ingress &>/dev/null; then
+                  echo "Secret ingress-cert found!"
+                  break
+                fi
+                
+                echo "Secret ingress-cert not found. Waiting 30 seconds... ($ELAPSED/$TIMEOUT seconds elapsed)"
+                sleep 30
+                ELAPSED=$((ELAPSED + INTERVAL))
+              done
+              
+              # Final check after timeout
+              if ! oc get secret ingress-cert -n openshift-ingress &>/dev/null; then
+                echo "ERROR: Timeout waiting for secret ingress-cert to exist after $TIMEOUT seconds"
+                exit 1
+              fi
+              
+              echo "Patching ingress controller to set default certificate..."
+              oc patch ingresscontroller.operator default \
+                --type=merge -p \
+                '{"spec":{"defaultCertificate": {"name": "ingress-cert"}}}' \
+                -n openshift-ingress-operator
+
+              echo -n "ingress-cert patched successfully!"
+
+          imagePullPolicy: IfNotPresent
+          name: ingress-cert-patch
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      serviceAccount: cli-job-sa
+      serviceAccountName: cli-job-sa
+      terminationGracePeriodSeconds: 30
