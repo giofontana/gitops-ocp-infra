@@ -5,3 +5,4 @@ resources:
   - configure-auth.yaml
   - ingress-cert.yaml
   - machine-mgmt.yaml
+  - metallb.yaml
