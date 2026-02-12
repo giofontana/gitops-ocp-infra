@@ -6,4 +6,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
+  - github.com/giofontana/gitops-catalog/metallb-operator/operator/overlays/stable
   - github.com/giofontana/gitops-catalog/metallb-operator/instance/overlays/default
