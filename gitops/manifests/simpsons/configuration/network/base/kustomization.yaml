@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - nncp-br-ex-trunk.yaml
-  - nad-localnet-vlan1.yaml
-  - nad-localnet-vlan4.yaml
+  - nad-localnet-vlan102.yaml
+  - nad-localnet-trunk.yaml
