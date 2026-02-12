@@ -1,0 +1,13 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: bart.simpsons 
+  namespace: openshift-machine-api
+spec:
+  online: True
+  bootMACAddress: 24:6E:96:19:2C:58
+  bmc:
+    address: ipmi://192.168.100.13
+    credentialsName: bart-bmc-secret
+    disableCertificateVerification: True 
+  preprovisioningNetworkDataName: bart-network-config-secret 

@@ -20,7 +20,7 @@ Then run the following script to replace SS key (key should be located in ~/.bit
 Clone this or user the raw files url if preferred, then assuming a fresh install of OpenShift run the first command to install the Red Hat GitOps operator:
 
 ```
-oc create -k gitops/manifests/operators/openshift-gitops-operator/overlays/latest
+oc create -k gitops/manifests/<cluster-name>/aggregate/openshift-gitops
 oc patch consoles.operator.openshift.io/cluster --type='merge' -p '{"spec":{"plugins":["gitops-plugin"]}}'
 ```
 

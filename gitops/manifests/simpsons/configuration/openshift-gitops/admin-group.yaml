@@ -5,3 +5,4 @@ metadata:
   name: cluster-admins
 users:
 - admin
+- gfontana@redhat.com

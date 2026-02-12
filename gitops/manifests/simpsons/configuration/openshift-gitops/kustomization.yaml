@@ -2,6 +2,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - configure-auth.yaml
-  - ingress-cert.yaml
-  - machine-mgmt.yaml
+  - admin-group.yaml
