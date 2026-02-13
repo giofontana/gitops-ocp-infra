@@ -5,3 +5,4 @@ resources:
   - machine-mgmt.yaml
   - metallb.yaml
   - network.yaml
+  - local-storage.yaml
