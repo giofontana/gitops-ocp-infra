@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: storage-cluster-label-worker-nodes
+  generateName: storage-cluster-label-worker-nodes-
+spec:
+  template:
+    spec:
+      containers:
+        - name: labeler
+          image: registry.redhat.io/openshift4/ose-cli
+          env:
+            - name: node_names
+              value: '["homer.simpsons", "marge.simpsons", "bart.simpsons"]'
+          command:
+            - /bin/bash
+            - -c
+            - |
+              
+              # Parse the JSON array and convert to newline-separated list
+              nodes_array=$(echo "${node_names}" | sed 's/\[//g; s/\]//g; s/"//g; s/, */\n/g')
+              node_count=$(echo "${nodes_array}" | grep -c .)
+              
+              if [ ${node_count} -lt 3 ]; then
+                echo "Not enough nodes. Expected at least 3, found: ${node_count}"
+                exit 1
+              fi
+              
+              echo "Labeling the following nodes:"
+              echo "${nodes_array}"
+              
+              # Iterate over each node and label it
+              while IFS= read -r node; do
+                [ -z "$node" ] && continue
+                echo "Labeling node: ${node}"
+                oc label node "${node}" cluster.ocs.openshift.io/openshift-storage="" --overwrite=true
+              done <<< "${nodes_array}"
+      restartPolicy: Never
+      serviceAccount: ocs-node-labeler
+      serviceAccountName: ocs-node-labeler
+  backoffLimit: 4
