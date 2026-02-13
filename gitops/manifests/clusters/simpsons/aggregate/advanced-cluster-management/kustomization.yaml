@@ -8,5 +8,5 @@ commonAnnotations:
 
 resources:
   - ../../../../operators/advanced-cluster-management/overlays/release-2.15
-  - github.com/giofontana/gitops-catalog/advanced-cluster-management/instance/base/
+  - ../../configuration/advanced-cluster-management
   - github.com/giofontana/gitops-catalog/advanced-cluster-management/instance/observability/
