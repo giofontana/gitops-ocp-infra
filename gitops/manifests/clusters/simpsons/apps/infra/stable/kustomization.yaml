@@ -8,3 +8,4 @@ resources:
   - local-storage.yaml
   - openshift-data-foundation.yaml
   - openshift-image-registry.yaml
+  - openshift-monitoring-persistence.yaml
