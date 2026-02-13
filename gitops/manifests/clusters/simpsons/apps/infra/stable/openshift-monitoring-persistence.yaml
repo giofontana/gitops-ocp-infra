@@ -3,7 +3,6 @@ kind: Application
 metadata:
   name: openshift-monitoring-persistence
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: IgnoreExtraneous
   labels:
     gitops.ownedBy: default
@@ -13,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/my-home-lab/configuration/observability/openshift-monitoring/prod
+    path: gitops/manifests/clusters/simpsons/aggregate/openshift-monitoring/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

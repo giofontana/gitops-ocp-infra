@@ -3,7 +3,6 @@ kind: Application
 metadata:
   name: local-storage
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: IgnoreExtraneous
   labels:
     gitops.ownedBy: default
