@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: frigate
+  name: app-of-apps-workloads-simpsons
+  namespace: openshift-gitops
   annotations:
+    argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: IgnoreExtraneous
   labels:
     gitops.ownedBy: default
@@ -12,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/clusters/simpsons/aggregate/workloads/frigate/
+    path: gitops/manifests/clusters/simpsons/apps/workloads/stable
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
