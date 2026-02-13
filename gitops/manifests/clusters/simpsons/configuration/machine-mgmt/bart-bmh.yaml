@@ -12,4 +12,4 @@ spec:
     disableCertificateVerification: True 
   preprovisioningNetworkDataName: bart-network-config-secret 
   rootDeviceHints:
-    deviceName: "/dev/disk/by-id/wwn-0x61866da063b4c9002e9c3ee71fa3cfe2"
+    deviceName: "/dev/disk/by-path/pci-0000:03:00.0-scsi-0:2:0:0"
