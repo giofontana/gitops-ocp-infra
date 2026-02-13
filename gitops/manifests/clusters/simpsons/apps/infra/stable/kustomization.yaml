@@ -6,3 +6,4 @@ resources:
   - metallb.yaml
   - network.yaml
   - local-storage.yaml
+  - openshift-data-foundation.yaml
