@@ -13,7 +13,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/all/aggregate/ingress-cert/
+    path: gitops/manifests/clusters/all/aggregate/ingress-cert/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
