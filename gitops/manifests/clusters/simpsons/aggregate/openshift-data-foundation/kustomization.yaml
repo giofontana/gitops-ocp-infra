@@ -6,4 +6,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - github.com/giofontana/gitops-catalog/openshift-data-foundation-operator/operator/overlays/stable-4.20
+  - ../../../../operators/openshift-data-foundation/overlays/stable
+  - ../../configuration/storage/openshift-data-foundation/instance/overlays/baremetal
