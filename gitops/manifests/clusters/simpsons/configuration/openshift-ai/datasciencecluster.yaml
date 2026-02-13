@@ -1,30 +1,39 @@
+apiVersion: datasciencecluster.opendatahub.io/v2
 kind: DataScienceCluster
-apiVersion: datasciencecluster.opendatahub.io/v1
 metadata:
-  name: default
+  name: default-dsc
 spec:
   components:
-    codeflare:
-      managementState: Removed
     kserve:
-      managementState: Removed
-      serving:
-        ingressGateway:
-          certificate:
-            type: SelfSigned
+      managementState: Managed
+      nim:
         managementState: Managed
-        name: knative-serving
+      rawDeploymentServiceConfig: Headless
+    modelregistry:
+      managementState: Managed
+      registriesNamespace: rhoai-model-registries
+    feastoperator:
+      managementState: Removed
     trustyai:
-      managementState: Removed
+      eval:
+        lmeval:
+          permitCodeExecution: deny
+          permitOnline: deny
+      managementState: Managed
+    aipipelines:
+      managementState: Managed
     ray:
-      managementState: Removed
+      managementState: Managed
     kueue:
+      defaultClusterQueueName: default
+      defaultLocalQueueName: default
       managementState: Removed
     workbenches:
-      managementState: Removed
+      managementState: Managed
+      workbenchNamespace: rhods-notebooks
     dashboard:
       managementState: Managed
-    modelmeshserving:
+    llamastackoperator:
       managementState: Removed
-    datasciencepipelines:
-      managementState: Removed
+    trainingoperator:
+      managementState: Managed
