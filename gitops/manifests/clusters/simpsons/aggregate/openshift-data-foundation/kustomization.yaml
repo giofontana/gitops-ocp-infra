@@ -7,4 +7,5 @@ commonAnnotations:
 
 resources:
   - ../../../../operators/openshift-data-foundation/overlays/stable
+  - ../../configuration/storage/openshift-data-foundation/node-labeler/base
   - ../../configuration/storage/openshift-data-foundation/instance/overlays/baremetal
