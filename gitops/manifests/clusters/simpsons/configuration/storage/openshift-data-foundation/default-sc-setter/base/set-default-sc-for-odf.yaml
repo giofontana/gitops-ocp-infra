@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: set-default-sc-for-odf
+  generateName: set-default-sc-for-odf-
+spec:
+  template:
+    spec:
+      containers:
+        - name: default-sc-setter
+          image: registry.redhat.io/openshift4/ose-cli
+          env:
+            - name: default_storage_class_name
+              value: "ocs-storagecluster-ceph-rbd"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              
+              echo "Setting default storage class to: ${default_storage_class_name}"
+              oc patch storageclass "${default_storage_class_name}" -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+      restartPolicy: Never
+      serviceAccount: ocs-default-sc-setter
+      serviceAccountName: ocs-default-sc-setter
+  backoffLimit: 4
