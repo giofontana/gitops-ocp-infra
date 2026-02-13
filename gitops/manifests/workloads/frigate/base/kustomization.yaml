@@ -3,10 +3,10 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - deployment-cpu.yaml
-  - frigate-config-secret-sealed.yaml
-  - frigate-db-pvc.yaml
-  - frigate-media-pvc.yaml
+  - config-secret-sealed.yaml
+  - db-pvc.yaml
+  - media-pv.yaml
+  - media-pvc.yaml
   - rolebinding.yaml
   - route.yaml
   - service.yaml

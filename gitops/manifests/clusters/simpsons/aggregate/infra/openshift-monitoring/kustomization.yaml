@@ -7,4 +7,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - ../../configuration/observability/openshift-monitoring
+  - ../../../configuration/observability/openshift-monitoring

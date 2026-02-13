@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonAnnotations:
+  argocd.argoproj.io/sync-wave: "3"
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
+resources:
+  - ../../../../../operators/openshift-data-foundation/overlays/stable
+  - ../../../configuration/storage/openshift-data-foundation/node-labeler/base
+  - ../../../configuration/storage/openshift-data-foundation/default-sc-setter/base
+  - ../../../configuration/storage/openshift-data-foundation/instance/overlays/baremetal
+  - ../../../configuration/storage/nfs  

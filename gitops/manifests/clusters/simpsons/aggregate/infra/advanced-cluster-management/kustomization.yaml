@@ -7,6 +7,6 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - ../../../../operators/advanced-cluster-management/overlays/release-2.15
-  - ../../configuration/advanced-cluster-management
+  - ../../../../../operators/advanced-cluster-management/overlays/release-2.15
+  - ../../../configuration/advanced-cluster-management
   - github.com/giofontana/gitops-catalog/advanced-cluster-management/instance/observability/

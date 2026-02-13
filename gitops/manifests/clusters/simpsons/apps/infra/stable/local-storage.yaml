@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/clusters/simpsons/aggregate/local-storage/
+    path: gitops/manifests/clusters/simpsons/aggregate/infra/local-storage/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

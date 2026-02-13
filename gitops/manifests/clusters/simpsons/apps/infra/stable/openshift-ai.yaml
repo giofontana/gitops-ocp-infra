@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/clusters/simpsons/aggregate/openshift-ai/
+    path: gitops/manifests/clusters/simpsons/aggregate/infra/openshift-ai/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

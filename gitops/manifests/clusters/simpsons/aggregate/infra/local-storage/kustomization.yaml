@@ -7,5 +7,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - ../../../../operators/local-storage/overlays/stable
-  - ../../configuration/storage/local-storage/
+  - ../../../../../operators/local-storage/overlays/stable
+  - ../../../configuration/storage/local-storage/

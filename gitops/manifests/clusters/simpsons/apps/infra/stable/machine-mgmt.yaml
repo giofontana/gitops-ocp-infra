@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/manifests/clusters/simpsons/aggregate/machine-mgmt/
+    path: gitops/manifests/clusters/simpsons/aggregate/infra/machine-mgmt/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:
