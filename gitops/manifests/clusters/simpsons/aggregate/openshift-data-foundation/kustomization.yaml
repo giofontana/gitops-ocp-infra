@@ -11,3 +11,4 @@ resources:
   - ../../configuration/storage/openshift-data-foundation/node-labeler/base
   - ../../configuration/storage/openshift-data-foundation/default-sc-setter/base
   - ../../configuration/storage/openshift-data-foundation/instance/overlays/baremetal
+  - ../../configuration/storage/nfs  
