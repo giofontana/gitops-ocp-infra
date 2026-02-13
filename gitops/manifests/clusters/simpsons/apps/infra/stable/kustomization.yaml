@@ -9,3 +9,4 @@ resources:
   - openshift-data-foundation.yaml
   - openshift-image-registry.yaml
   - openshift-monitoring-persistence.yaml
+  - openshift-virtualization.yaml
