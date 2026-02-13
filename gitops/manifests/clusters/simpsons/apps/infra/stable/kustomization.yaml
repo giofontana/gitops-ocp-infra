@@ -7,3 +7,4 @@ resources:
   - network.yaml
   - local-storage.yaml
   - openshift-data-foundation.yaml
+  - openshift-image-registry.yaml
