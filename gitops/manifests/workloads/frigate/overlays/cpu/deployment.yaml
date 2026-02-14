@@ -44,9 +44,9 @@ spec:
         - name: config-volume
           mountPath: /config
           subPath: config
-#        - name: ssl-certs
-#          mountPath: /etc/letsencrypt/live/frigate
-#          readOnly: true
+        - name: ssl-certs
+          mountPath: /etc/letsencrypt/live/frigate
+          readOnly: true
       volumes:
       - name: cache
         emptyDir:
@@ -62,6 +62,6 @@ spec:
       - name: config-volume
         persistentVolumeClaim:
           claimName: db-pvc
-#      - name: ssl-certs
-#        secret:
-#          secretName: frigate-certs          
+      - name: ssl-certs
+        secret:
+          secretName: frigate-certs          

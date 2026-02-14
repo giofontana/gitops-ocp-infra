@@ -6,6 +6,7 @@ namespace: frigate
 resources:
   - namespace.yaml
   - config-secret-sealed.yaml
+  - frigate-certs-sealed.yaml
   - db-pvc.yaml
   - media-pv.yaml
   - media-pvc.yaml
