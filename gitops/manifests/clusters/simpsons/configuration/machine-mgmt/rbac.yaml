@@ -3,15 +3,13 @@ kind: ClusterRole
 metadata:
   name: machineset-replicas-setter
 rules:
-  - apiGroups: [""]
+  - apiGroups: ["machine.openshift.io"]
     resources:
-      - nodes
-      - pods
+      - machinesets
     verbs:
       - get
       - list
       - patch
-      - label
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
