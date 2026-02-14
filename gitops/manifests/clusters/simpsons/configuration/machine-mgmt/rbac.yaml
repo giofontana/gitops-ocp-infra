@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: machineset-replicas-setter
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - pods
+    verbs:
+      - get
+      - list
+      - patch
+      - label
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: machineset-replicas-setter
+  namespace: openshift-storage
+subjects:
+  - kind: ServiceAccount
+    name: machineset-replicas-setter
+    namespace: openshift-storage
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: machineset-replicas-setter

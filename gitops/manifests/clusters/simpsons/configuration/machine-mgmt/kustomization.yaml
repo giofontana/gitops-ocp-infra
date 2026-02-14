@@ -8,5 +8,6 @@ resources:
   - bart-bmh.yaml
   - bart-network-config-secret-sealed.yaml
   - bart-bmc-secret-sealed.yaml
-#  - worker-kubeletconfig.yaml
-#  - master-kubeletconfig.yaml
+  - machineset-replicas-setter-job.yaml
+  - rbac.yaml
+  - service-account.yaml  

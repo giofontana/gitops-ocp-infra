@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: machineset-replicas-setter
+  generateName: machineset-replicas-setter-
+spec:
+  template:
+    spec:
+      containers:
+        - name: labeler
+          image: registry.redhat.io/openshift4/ose-cli
+          env:
+            - name: num_replicas
+              value: '1'
+          command:
+            - /bin/bash
+            - -c
+            - |
+              
+              oc -n openshift-machine-api scale $(oc get machinesets.machine.openshift.io -n openshift-machine-api -o name) --replicas=${num_replicas}
+      restartPolicy: Never
+      serviceAccount: machineset-replicas-setter
+      serviceAccountName: machineset-replicas-setter
+  backoffLimit: 4
