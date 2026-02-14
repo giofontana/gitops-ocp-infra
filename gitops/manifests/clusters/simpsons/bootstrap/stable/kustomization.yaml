@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
   - app-of-apps-infra.yaml 
+  - app-of-apps-workloads.yaml

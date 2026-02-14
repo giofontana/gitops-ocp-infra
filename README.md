@@ -20,13 +20,13 @@ Then run the following script to replace SS key (key should be located in ~/.bit
 Clone this or user the raw files url if preferred, then assuming a fresh install of OpenShift run the first command to install the Red Hat GitOps operator:
 
 ```
-oc create -k gitops/manifests/clusters/all/aggregate/openshift-gitops
+oc apply -k gitops/manifests/clusters/all/aggregate/openshift-gitops
 oc patch consoles.operator.openshift.io/cluster --type='merge' -p '{"spec":{"plugins":["gitops-plugin"]}}'
 ```
 
 Once the operator is installed, we use the App of Apps pattern to initiate the install of all other operators, including the creation of the pipeline and integration of ACS with the Internal Registry. Notice this might take a while to finish the sync and install everything.
 
 ```
-oc create -k gitops/manifests/clusters/all/bootstrap/stable
-oc create -k gitops/manifests/clusters/<cluster-name>/bootstrap/stable
+oc apply -k gitops/manifests/clusters/all/bootstrap/stable
+oc apply -k gitops/manifests/clusters/<cluster-name>/bootstrap/stable
 ```
