@@ -2,8 +2,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: ocs-default-sc-setter
-  annotations:
-    argocd.argoproj.io/sync-wave: "-5"
 rules:
   - apiGroups: ["storage.k8s.io"]
     resources:
@@ -19,10 +17,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: ocs-default-sc-setter
   namespace: openshift-storage
-  annotations:
-    argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/sync-wave: "-5"
-    argocd.argoproj.io/sync-options: ServerSideApply=true
 subjects:
   - kind: ServiceAccount
     name: ocs-default-sc-setter
