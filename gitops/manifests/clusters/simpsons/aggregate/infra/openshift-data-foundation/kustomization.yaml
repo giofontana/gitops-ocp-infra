@@ -4,6 +4,7 @@ kind: Kustomization
 
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "3"
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
   - ../../../../../operators/openshift-data-foundation/overlays/stable
