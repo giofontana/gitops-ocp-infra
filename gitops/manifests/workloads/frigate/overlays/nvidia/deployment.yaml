@@ -6,6 +6,8 @@ metadata:
     app: frigate
 spec:
   replicas: 1
+  strategy:
+    type: Recreate  
   selector:
     matchLabels:
       app: frigate
@@ -50,6 +52,10 @@ spec:
         - name: ssl-certs
           mountPath: /etc/letsencrypt/live/frigate
           readOnly: true
+        - name: config-secret
+          mountPath: /config/config.yaml
+          subPath: config.yaml
+          readOnly: true          
       volumes:
       - name: cache
         emptyDir:
@@ -61,10 +67,16 @@ spec:
           sizeLimit: 384Mi
       - name: media-volume
         persistentVolumeClaim:
-          claimName: frigate-pvc
+          claimName: media-pvc
       - name: config-volume
         persistentVolumeClaim:
-          claimName: frigate-config-pvc
+          claimName: db-pvc
       - name: ssl-certs
         secret:
           secretName: frigate-certs          
+      - name: config-secret
+        secret:
+          secretName: frigate-config-secret
+          items:
+          - key: config.yaml
+            path: config.yaml              
