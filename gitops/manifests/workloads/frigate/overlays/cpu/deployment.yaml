@@ -47,6 +47,10 @@ spec:
         - name: ssl-certs
           mountPath: /etc/letsencrypt/live/frigate
           readOnly: true
+        - name: config-secret
+          mountPath: /config/config.yaml
+          subPath: config.yaml
+          readOnly: true
       volumes:
       - name: cache
         emptyDir:
@@ -64,4 +68,10 @@ spec:
           claimName: db-pvc
       - name: ssl-certs
         secret:
-          secretName: frigate-certs          
+          secretName: frigate-certs
+      - name: config-secret
+        secret:
+          secretName: frigate-config-secret
+          items:
+          - key: config.yaml
+            path: config.yaml          
