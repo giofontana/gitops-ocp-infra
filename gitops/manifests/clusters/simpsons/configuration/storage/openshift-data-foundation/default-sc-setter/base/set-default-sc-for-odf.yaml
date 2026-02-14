@@ -17,8 +17,28 @@ spec:
             - -c
             - |
               
-              echo "Setting default storage class to: ${default_storage_class_name}"
-              oc patch storageclass "${default_storage_class_name}" -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+              SC_NAME="${default_storage_class_name}"
+              TIMEOUT=1800  # 30 minutes in seconds
+              WAIT_TIME=120  # 2 minutes in seconds
+              ELAPSED=0
+              
+              echo "Searching for storage class: ${SC_NAME}"
+              
+              while [ $ELAPSED -lt $TIMEOUT ]; do
+                if oc get storageclass "${SC_NAME}" > /dev/null 2>&1; then
+                  echo "Storage class found! Setting ${SC_NAME} as default..."
+                  oc patch storageclass "${SC_NAME}" -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+                  echo "Successfully set ${SC_NAME} as default storage class"
+                  exit 0
+                fi
+                
+                echo "Storage class ${SC_NAME} not found. Waiting 2 minutes before retrying... (${ELAPSED}/${TIMEOUT} seconds elapsed)"
+                sleep $WAIT_TIME
+                ELAPSED=$((ELAPSED + WAIT_TIME))
+              done
+              
+              echo "ERROR: Storage class ${SC_NAME} not found after 30 minutes timeout"
+              exit 1
       restartPolicy: Never
       serviceAccount: ocs-default-sc-setter
       serviceAccountName: ocs-default-sc-setter
