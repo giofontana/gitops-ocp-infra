@@ -4,6 +4,8 @@ metadata:
   name: worker-kubeletconfig
 spec:
   autoSizingReserved: true 
+  kubeletConfig:
+    maxPods: 500  
   machineConfigPoolSelector:
     matchLabels:
       pools.operator.machineconfiguration.openshift.io/worker: "" 
