@@ -12,3 +12,4 @@ resources:
   - openshift-virtualization.yaml
   - advanced-cluster-management.yaml
   - openshift-ai.yaml
+  - node-feature-discovery.yaml
