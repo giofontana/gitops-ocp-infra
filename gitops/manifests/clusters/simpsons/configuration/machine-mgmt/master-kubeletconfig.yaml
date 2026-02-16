@@ -5,7 +5,8 @@ metadata:
 spec:
   autoSizingReserved: true 
   kubeletConfig:
-    maxPods: 500  
+    maxPods: 500
+    podsPerCore: 0
   machineConfigPoolSelector:
     matchLabels:
       pools.operator.machineconfiguration.openshift.io/master: "" 
