@@ -8,4 +8,4 @@ commonAnnotations:
 
 resources:
   - ../../../../../operators/nvidia-gpu-operator/overlays/stable
-  - github.com/giofontana/gitops-catalog/nvidia-gpu-operator/instance/overlays/time-sliced-10
+  - ../../../configuration/nvidia-gpu
