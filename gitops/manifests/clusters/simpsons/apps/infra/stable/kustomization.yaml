@@ -13,3 +13,4 @@ resources:
   - advanced-cluster-management.yaml
   - openshift-ai.yaml
   - node-feature-discovery.yaml
+  - nvidia-gpu.yaml
