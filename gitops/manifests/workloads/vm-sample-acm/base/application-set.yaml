@@ -19,8 +19,7 @@ spec:
     spec:
       project: default
       sources:
-        - repositoryType: git
-          repoURL: https://github.com/giofontana/gitops-ocp-infra.git
+        - repoURL: https://github.com/giofontana/gitops-ocp-infra.git
           targetRevision: main
           path: gitops/manifests/workloads/vm-sample-acm/base
       destination:
