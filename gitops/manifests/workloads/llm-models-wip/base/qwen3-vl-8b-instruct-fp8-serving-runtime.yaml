@@ -8,14 +8,10 @@ metadata:
     opendatahub.io/template-display-name: Custom - vLLM ServingRuntime - RTX3090
     opendatahub.io/template-name: template-pdmjm8
     openshift.io/display-name: Custom - vLLM ServingRuntime - RTX3090
-  creationTimestamp: "2025-12-22T19:59:38Z"
-  generation: 1
   labels:
     opendatahub.io/dashboard: "true"
   name: qwenqwen3-vl-8b-instruct-fp8
   namespace: llm-models
-  resourceVersion: "33816878"
-  uid: 1651334a-dd16-4c79-afa8-1f5f2fb1d774
 spec:
   annotations:
     opendatahub.io/kserve-runtime: vllm

@@ -4,7 +4,7 @@ metadata:
   annotations:
     opendatahub.io/connection-path: sdxl
     opendatahub.io/connections: secret-text-to-image-gen-v2.1
-    opendatahub.io/hardware-profile-name: default-profile-nvidia-gpu
+    opendatahub.io/hardware-profile-name: nvidia-gpu
     opendatahub.io/hardware-profile-namespace: redhat-ods-applications
     opendatahub.io/model-type: generative
     openshift.io/description: ""
@@ -12,18 +12,8 @@ metadata:
     security.opendatahub.io/enable-auth: "false"
     serving.kserve.io/deploymentMode: RawDeployment
     serving.kserve.io/stop: "true"
-  creationTimestamp: "2026-01-13T15:18:29Z"
-  finalizers:
-  - inferenceservice.finalizers
-  - odh.inferenceservice.finalizers
-  generation: 12
-  labels:
-    networking.kserve.io/visibility: exposed
-    opendatahub.io/dashboard: "true"
   name: sdxl
   namespace: llm-models
-  resourceVersion: "121562472"
-  uid: 7ffb723a-3f8b-43b5-9edc-1993fce7a445
 spec:
   predictor:
     automountServiceAccountToken: false

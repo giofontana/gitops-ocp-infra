@@ -1,0 +1,16 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  annotations:
+    openshift.io/display-name: sdxl-storage
+  name: sdxl-storage
+  namespace: llm-models
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  volumeMode: Filesystem

@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: llm-models
+
+resources:
+  - namespace.yaml
+  - template.yaml
+  - imagestream.yaml
+  - qwen3-vl-8b-instruct-fp8-serving-runtime.yaml
+  - qwen3-vl-8b-instruct-fp8-inference-service.yaml
+  - llm-models-sealed.yaml
+  - sdxl-inference-service.yaml
+  - sdxl-serving-runtime.yaml
+  - sdxl-pvc.yaml
+  - sdxl-notebook.yaml  
+  - text-to-image-pvc.yaml

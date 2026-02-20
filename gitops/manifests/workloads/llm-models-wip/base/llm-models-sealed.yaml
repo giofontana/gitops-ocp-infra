@@ -21,7 +21,6 @@ spec:
       creationTimestamp: null
       labels:
         opendatahub.io/dashboard: "true"
-        opendatahub.io/managed: "true"
       name: llm-models
       namespace: llm-models
     type: Opaque

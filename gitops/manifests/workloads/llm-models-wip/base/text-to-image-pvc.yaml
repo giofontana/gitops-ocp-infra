@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: text-to-image-model
+  namespace: llm-models
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  volumeMode: Filesystem
+  storageClassName: ocs-storagecluster-cephfs

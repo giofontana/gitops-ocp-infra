@@ -1,0 +1,48 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/model-type: '["generative"]'
+    opendatahub.io/modelServingSupport: '["single"]'
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: template-pdmjm8
+  namespace: redhat-ods-applications
+objects:
+- apiVersion: serving.kserve.io/v1alpha1
+  kind: ServingRuntime
+  metadata:
+    annotations:
+      opendatahub.io/apiProtocol: REST
+      opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+      openshift.io/display-name: Custom - vLLM ServingRuntime - RTX3090
+    labels:
+      opendatahub.io/dashboard: "true"
+    name: vllm-runtime-rtx3090
+  spec:
+    annotations:
+      opendatahub.io/kserve-runtime: vllm
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8080"
+    containers:
+    - args:
+      - --model=/mnt/models/
+      - --port=8080
+      - --served-model-name={{.Name}}
+      command:
+      - python
+      - -m
+      - vllm.entrypoints.openai.api_server
+      env:
+      - name: HF_HOME
+        value: /tmp/hf_home
+      image: registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.2.5
+      name: kserve-container
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+    multiModel: false
+    supportedModelFormats:
+    - autoSelect: true
+      name: vLLM

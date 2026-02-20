@@ -7,14 +7,10 @@ metadata:
     opendatahub.io/serving-runtime-scope: global
     opendatahub.io/template-display-name: Kserve for SDXL
     openshift.io/display-name: Kserve for SDXL
-  creationTimestamp: "2026-01-13T15:26:28Z"
-  generation: 7
   labels:
     opendatahub.io/dashboard: "true"
   name: kserve-sdxl
   namespace: llm-models
-  resourceVersion: "98301872"
-  uid: 579b0cef-7732-4b17-b3e3-2e51e499e117
 spec:
   annotations:
     opendatahub.io/kserve-runtime: sdxl

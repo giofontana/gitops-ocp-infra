@@ -17,12 +17,6 @@ metadata:
     opendatahub.io/workbench-image-namespace: ""
     openshift.io/description: ""
     openshift.io/display-name: sdxl
-  creationTimestamp: "2026-01-14T22:05:09Z"
-  finalizers:
-  - notebook.opendatahub.io/httproute-cleanup
-  - notebook.opendatahub.io/referencegrant-cleanup
-  - notebook.opendatahub.io/kube-rbac-proxy-cleanup
-  generation: 1
   labels:
     app: sdxl
     opendatahub.io/dashboard: "true"
@@ -30,8 +24,6 @@ metadata:
     opendatahub.io/user: gfontana-40redhat-2ecom
   name: sdxl
   namespace: llm-models
-  resourceVersion: "182159425"
-  uid: 86c81348-b5dc-4a9b-8f9c-574aa307032a
 spec:
   template:
     spec:
