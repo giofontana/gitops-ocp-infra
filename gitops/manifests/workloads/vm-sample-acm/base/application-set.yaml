@@ -23,7 +23,6 @@ spec:
           repoURL: https://github.com/giofontana/gitops-ocp-infra.git
           targetRevision: main
           path: gitops/manifests/workloads/vm-sample-acm/base
-          repositoryType: git
       destination:
         namespace: vm-sample-acm
         server: "{{server}}"
