@@ -21,7 +21,7 @@ spec:
       sources:
         - repoURL: https://github.com/giofontana/gitops-ocp-infra.git
           targetRevision: main
-          path: gitops/manifests/workloads/vm-sample-acm/base
+          path: gitops/manifests/workloads/vm-sample-acm/overlays/stable
       destination:
         namespace: vm-sample-acm
         server: "{{server}}"
