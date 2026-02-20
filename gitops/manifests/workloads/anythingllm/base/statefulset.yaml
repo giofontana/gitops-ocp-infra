@@ -39,9 +39,9 @@ spec:
             - name: LLM_PROVIDER
               value: 'generic-openai'
             - name: GENERIC_OPEN_AI_BASE_PATH
-              value: 'https://qwenqwen3-vl-8b-thinking-fp8-llm-models.apps.simpsons.lab.gfontana.me/v1'
+              value: 'https://qwen3-vl-8b-instruct-fp8-llm-models.apps.simpsons.lab.gfontana.me/v1'
             - name: GENERIC_OPEN_AI_MODEL_PREF
-              value: 'Qwen/Qwen3-VL-8B-Thinking-FP8'
+              value: 'Qwen/Qwen3-VL-8B-Instruct-FP8'
             - name: GENERIC_OPEN_AI_MODEL_TOKEN_LIMIT
               value: '4096'
             - name: GENERIC_OPEN_AI_API_KEY

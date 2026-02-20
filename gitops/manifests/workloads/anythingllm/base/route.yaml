@@ -2,7 +2,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: anythingllm
-  namespace: frigate
+  namespace: anythingllm
 spec:
   host: chatgft.gfontana.me
   to:

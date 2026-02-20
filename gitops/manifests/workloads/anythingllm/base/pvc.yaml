@@ -9,6 +9,8 @@ spec:
   resources:
     requests:
       storage: 100Gi
+  volumeMode: Filesystem
+  storageClassName: ocs-storagecluster-cephfs      
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -21,3 +23,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  volumeMode: Filesystem
+  storageClassName: ocs-storagecluster-cephfs      
