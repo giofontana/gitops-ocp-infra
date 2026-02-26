@@ -14,3 +14,4 @@ resources:
   - openshift-ai.yaml
   - node-feature-discovery.yaml
   - nvidia-gpu.yaml
+  - node-maintenance-operator.yaml
