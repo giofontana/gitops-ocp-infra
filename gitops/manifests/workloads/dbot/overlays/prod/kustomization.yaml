@@ -5,4 +5,4 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - github.com/giofontana/dbot/gitops/overlays/prod
+  - github.com/giofontana/dbot/gitops/overlays/prod?ref=main
