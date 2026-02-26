@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: frigate
+  name: dbot
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
   labels:
