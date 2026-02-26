@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - application-set.yaml
   - config-map.yaml
-  - placement.yaml
+  - placement-resource-score.yaml

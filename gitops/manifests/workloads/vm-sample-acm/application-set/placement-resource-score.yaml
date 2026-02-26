@@ -1,0 +1,23 @@
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: vm-sample-acm-placement-placement
+  namespace: openshift-gitops
+spec:
+  numberOfClusters: 1
+  clusterSets:
+    - default  
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            env: prod        
+  prioritizerPolicy:
+    mode: Exact
+    configurations:
+      - scoreCoordinate:
+          type: AddOn
+          addOn:
+            resourceName: resource-usage-score
+            scoreName: cpuAvailable
+        weight: 1
