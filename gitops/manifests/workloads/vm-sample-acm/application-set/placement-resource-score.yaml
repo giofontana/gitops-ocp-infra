@@ -20,4 +20,10 @@ spec:
           addOn:
             resourceName: resource-usage-score
             scoreName: cpuAvailable
-        weight: 1
+        weight: 2
+      - scoreCoordinate:
+          type: AddOn
+          addOn:
+            resourceName: resource-usage-score
+            scoreName: memoryAvailable
+        weight: 2        
