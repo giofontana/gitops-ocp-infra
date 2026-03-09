@@ -1,0 +1,18 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: argocd-workloads-cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: argocd-workloads-argocd-application-controller
+    namespace: argocd-workloads
+  - kind: ServiceAccount
+    name: argocd-workloads-applicationset-controller
+    namespace: argocd-workloads
+  - kind: ServiceAccount
+    name: argocd-workloads-argocd-server
+    namespace: argocd-workloads
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin

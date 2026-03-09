@@ -15,3 +15,4 @@ resources:
   - node-feature-discovery.yaml
   - nvidia-gpu.yaml
   - node-maintenance-operator.yaml
+  - argocd-workloads.yaml

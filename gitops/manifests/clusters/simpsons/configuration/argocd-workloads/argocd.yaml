@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: argocd-workloads
+  namespace: argocd-workloads
+spec:
+  server:
+    route:
+      enabled: true
+  rbac:
+    defaultPolicy: ''
+    policy: |
+      g, cluster-admins, role:admin
+    scopes: '[groups]'

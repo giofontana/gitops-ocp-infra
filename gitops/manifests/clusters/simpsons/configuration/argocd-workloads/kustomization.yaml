@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd-workloads
+
+resources:
+  - namespace.yaml
+  - argocd.yaml
+  - clusterrolebinding.yaml
+  - patch-subscription-job.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: patch-subscription-job
+    namespace: argocd-workloads
+    files:
+      - patch-subscription-job.sh
