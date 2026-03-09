@@ -8,7 +8,7 @@ metadata:
     gitops.ownedBy: default
 spec:
   destination:
-    namespace: openshift-gitops
+    namespace: argocd-workloads
     server: https://kubernetes.default.svc
   project: default
   source:
