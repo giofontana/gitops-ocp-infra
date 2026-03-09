@@ -19,10 +19,10 @@ spec:
     automated:
       prune: false
       selfHeal: true
-ignoreDifferences:
-  - group: ""
-    kind: ConfigMap
-    name: cluster-monitoring-config
-    namespace: openshift-monitoring
-    jsonPointers:
-    - /data/config.yaml
+  ignoreDifferences:
+    - group: ""
+      kind: ConfigMap
+      name: cluster-monitoring-config
+      namespace: openshift-monitoring
+      jsonPointers:
+      - /data/config.yaml
