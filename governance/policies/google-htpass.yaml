@@ -1,0 +1,97 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-google-auth-hcp
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: SystemAndCommunicationsProtection
+    policy.open-cluster-management.io/controls: SC-8 Transmission Confidentiality and Integrity
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: config-google-auth-hcp
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: bitnami.com/v1alpha1
+                kind: SealedSecret
+                metadata:
+                  creationTimestamp: null
+                  name: google-secret
+                  namespace: clusters
+                spec:
+                  encryptedData:
+                    clientSecret: AgBrHVHrXMMtLJlv2ewTqmUPdYq99E0QPqR7qWsUnTAmDTjdpg2Sbb0PuC5nReLFahaW6/91a3kjZ6wTcL8y7EhTroplXzPSXDeo+3OvD6Uej9hWiRgEmaAlaEIj6ZBEg4oUCLa98qb03gkaMtiEG1oXWAJzcGftIfYzOodnoXDHYNrlzIdUJAYrBbvotyQkTRiTGRnTaf5DOwk6HaE1H0vnzVcCvLWpnMrimIaI1Eeo1B6vBEa/XtgI3B2LQ4bQvbyuVzB0GIal67MSD68phY0qtp/lLUiIVs1BBVxqbC5MV4VImqm2Fv9Zv/5wqRlV6CWc6Lfr4jjEGyn11jt1/E4GZ+RAJAJ4CwuvgirO0M2ffEAJpgE4hBh5xxFxSPJRN3/2DmjpRdbX+05pKDfDmQmu2FP4qu1Yz7DFBTGSSXeVY90a8jK3toDWOUqDGqI56yhGHP1c8+MKnPGhXBuqflPnCzqOXwPCV0GhYRKxx9DCnv+1GrYzsDN2IhUun0ctiw4YGhjMqiF9ngEKGA4+9/ZrkKOmVkGKdyAeRtvGOQ5CEo7iwA2+vP1upPqOeQFdq7MmaKx1XTDuKIOpzlcgorNOUAQh7rNU9GCcZlQjsu2RcpFD1bNJAMRww5LhMXnB65oi+cvaRuQ0+XyA7eYkm7ItGFxhtxrSo0sgQZpkRFXxkh97lP4R/v5i1WpqglZGqtLGg8zwAFlRQu90alN41cRpSm07wcQss3lJ9CCtEQmU39J7RQ==
+                  template:
+                    metadata:
+                      creationTimestamp: null
+                      name: google-secret
+                      namespace: clusters
+                    type: Opaque
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: config-google-oauth
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates-raw: |
+            {{- range (lookup "hypershift.openshift.io/v1beta1" "HostedCluster" "clusters" "").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: hypershift.openshift.io/v1beta1
+                kind: HostedCluster
+                metadata:
+                  name: '{{ .metadata.name }}'
+                  namespace: clusters
+                spec:
+                  configuration:
+                    oauth:
+                      identityProviders:
+                        - google:
+                            clientID: 101969444975-lfcib2cdmocpr5fisddorvkmc4nrst6g.apps.googleusercontent.com
+                            clientSecret:
+                              name: google-secret
+                            hostedDomain: redhat.com
+                          mappingMethod: claim
+                          name: RedHatSSO
+                          type: Google        
+            {{- end }}
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: policy-google-hcp-placement
+  namespace: open-cluster-management-policies
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            local-cluster: "true"
+  clusterSets:
+    - default
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: policy-google-hcp-placement
+  namespace: open-cluster-management-policies
+placementRef:
+  name: policy-google-hcp-placement
+  kind: Placement
+  apiGroup: cluster.open-cluster-management.io
+subjects:
+  - name: policy-google-auth-hcp
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io

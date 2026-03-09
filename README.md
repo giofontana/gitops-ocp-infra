@@ -22,6 +22,7 @@ Clone this or user the raw files url if preferred, then assuming a fresh install
 ```
 oc apply -k gitops/manifests/clusters/all/aggregate/openshift-gitops
 oc patch consoles.operator.openshift.io/cluster --type='merge' -p '{"spec":{"plugins":["gitops-plugin"]}}'
+oc patch argocd openshift-gitops -n openshift-gitops  --type json -p '[{"op": "replace", "path": "/spec/controller/resources/limits/memory", "value": "8Gi"}]'
 ```
 
 Once the operator is installed, we use the App of Apps pattern to initiate the install of all other operators, including the creation of the pipeline and integration of ACS with the Internal Registry. Notice this might take a while to finish the sync and install everything.

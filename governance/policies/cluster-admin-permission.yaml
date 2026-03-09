@@ -1,0 +1,67 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: cluster-admin-role-binding
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: SystemAndCommunicationsProtection
+    policy.open-cluster-management.io/controls: SC-8 Transmission Confidentiality and Integrity
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cluster-admin-role-binding
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: admin-cluster-admin-rb
+                subjects:
+                  - kind: User
+                    apiGroup: rbac.authorization.k8s.io
+                    name: admin
+                  - kind: User
+                    apiGroup: rbac.authorization.k8s.io
+                    name: gfontana@redhat.com    
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: cluster-admin
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: cluster-admin-role-binding-placement
+  namespace: open-cluster-management-policies
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            vendor: "OpenShift"
+  clusterSets:
+    - default
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: cluster-admin-role-binding-placement
+  namespace: open-cluster-management-policies
+placementRef:
+  name: cluster-admin-role-binding-placement
+  kind: Placement
+  apiGroup: cluster.open-cluster-management.io
+subjects:
+  - name: cluster-admin-role-binding
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io

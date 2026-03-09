@@ -1,0 +1,95 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-htpass-hcp
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: SystemAndCommunicationsProtection
+    policy.open-cluster-management.io/controls: SC-8 Transmission Confidentiality and Integrity
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: config-htpass-hcp
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: bitnami.com/v1alpha1
+                kind: SealedSecret
+                metadata:
+                  creationTimestamp: null
+                  name: htpass-secret
+                  namespace: clusters
+                spec:
+                  encryptedData:
+                    htpasswd: AgB8DB7k+l7c2Rd9wx1SskPwAS3JCvzSu31G+UmI6KkB6HvJVFk4ZUXDskJGqDDZSLk+Ho+PpzgAJZPkkJVAdG6JsXE25OC5rQKp9Vn0mCPaRFQEyFA0bfSmEOubDMXnFx+xoRvq2CBFL7OUh+01RH+sEXv/qTKuE5K2mJOvqnxhdMOQFSgVV2WRSMLE8JmmS0HZmjG6lomtYXPrfOs4sKAEX4Wu9OG7eOFTWT+GclKSN1iSf88d+7vmcRes5tGeEsPDE0XBTv2xSWm08xNRGeyc2MaRsxPauGp7nvvSgGeqSK9SM+f/iiNFrpmPxz+o3+EzzOLfty/e+Kav38ibrQJH3kA2dqH0DTpkLpBCXUGfOYnxk0uP6q5LAJk8YWcJkioLQFXGTJe4P9TCpQZazKyHhSf+ZqX6WC85HM5jXE0l7+HAYrPu8ewjEwZu2DRBMI0zrnPQ5jHZyNdISZgSBeGBV9Nx7qtwfI40QXayN6RWFT7mMP+5273mp46/HMzIUqW0eY6A9DeBAKc+/W1dODHrH6mN2b9uauPnQIjdE9Xfb9DW4dONsv5WaRW6hiNYNZ8qPixZdR/+I+ltM2lQhW7i18OsWPpR+hVECFzxQd5no06TntOxX5M4Uhr0Ux9CL870KJBLsfh5bPkOJIWs4edzbkfb8XE2U7zNkho+GjiuotuBQippet00tJkKG/kXpYN817rSyYcfWFvED0mdlotBRb3aBPR9wQdAxEA79z6IwBN9tzruBTWkQ+9GgccjJHafYjEkYyD2/iMdy1FjeiGAa0Z1
+                  template:
+                    metadata:
+                      creationTimestamp: null
+                      name: htpass-secret
+                      namespace: clusters
+                    type: Opaque
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: config-htpass-oauth
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates-raw: |
+            {{- range (lookup "hypershift.openshift.io/v1beta1" "HostedCluster" "clusters" "").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: hypershift.openshift.io/v1beta1
+                kind: HostedCluster
+                metadata:
+                  name: '{{ .metadata.name }}'
+                  namespace: clusters
+                spec:
+                  configuration:
+                    oauth:
+                      identityProviders:
+                        - name: htpasswd-auth
+                          mappingMethod: claim
+                          type: HTPasswd
+                          htpasswd:
+                            fileData:
+                              name: htpass-secret
+            {{- end }}
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: policy-htpass-hcp-placement
+  namespace: open-cluster-management-policies
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            local-cluster: "true"
+  clusterSets:
+    - default
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: policy-htpass-hcp-placement
+  namespace: open-cluster-management-policies
+placementRef:
+  name: policy-htpass-hcp-placement
+  kind: Placement
+  apiGroup: cluster.open-cluster-management.io
+subjects:
+  - name: policy-htpass-hcp
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io
