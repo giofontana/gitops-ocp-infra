@@ -8,6 +8,7 @@ resources:
   - argocd.yaml
   - clusterrolebinding.yaml
   - patch-subscription-job.yaml
+  - consolelink.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
