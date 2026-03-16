@@ -17,7 +17,5 @@ spec:
   - server auth
   renewBefore: 720h  # Renew 30 days before expiry
   secretTemplate:
-    annotations:
-      cert-manager.io/certificate-name: frigate-cert
     labels:
       app: frigate
