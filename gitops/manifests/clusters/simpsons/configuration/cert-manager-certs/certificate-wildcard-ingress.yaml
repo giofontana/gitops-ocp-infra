@@ -8,11 +8,10 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "gfontana.me"
   dnsNames:
-  - "*.gfontana.me"
-  - "*.simpsons.lab.gfontana.me"
   - "*.apps.simpsons.lab.gfontana.me"
+  - "*.simpsons.lab.gfontana.me"
+  - "*.gfontana.me"
   usages:
   - digital signature
   - key encipherment
