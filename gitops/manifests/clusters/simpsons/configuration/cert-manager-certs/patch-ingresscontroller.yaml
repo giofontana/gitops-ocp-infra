@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: patch-ingress-cert-manager
+  namespace: openshift-ingress-operator
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  template:
+    spec:
+      containers:
+      - name: patch
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          oc patch ingresscontroller default \
+            -n openshift-ingress-operator \
+            --type=merge \
+            -p '{"spec":{"defaultCertificate":{"name":"wildcard-apps-tls"}}}'
+      restartPolicy: Never
+      serviceAccountName: cli-job-sa
+  backoffLimit: 4
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cli-job-sa
+  namespace: openshift-ingress-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: patch-ingress-controller-cert-manager-role
+rules:
+- apiGroups: ["operator.openshift.io"]
+  resources: ["ingresscontrollers"]
+  verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: patch-ingress-controller-cert-manager-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: patch-ingress-controller-cert-manager-role
+subjects:
+- kind: ServiceAccount
+  name: cli-job-sa
+  namespace: openshift-ingress-operator

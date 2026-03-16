@@ -17,3 +17,5 @@ resources:
   - node-maintenance-operator.yaml
   - argocd-workloads.yaml
   - argocd-infra.yaml
+  - cert-manager.yaml
+  - cert-manager-certs.yaml
