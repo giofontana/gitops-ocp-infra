@@ -5,7 +5,7 @@ metadata:
 spec:
   identityProviders:
     - name: htpasswd-auth
-      mappingMethod: claim 
+      mappingMethod: claim
       type: HTPasswd
       htpasswd:
         fileData:
@@ -17,4 +17,11 @@ spec:
         hostedDomain: redhat.com
       mappingMethod: claim
       name: RedHatSSO
-      type: Google        
+      type: Google
+    - name: GitHub
+      mappingMethod: claim
+      type: GitHub
+      github:
+        clientID: Ov23lis1vDMZlwCtx7qw
+        clientSecret:
+          name: github-secret        

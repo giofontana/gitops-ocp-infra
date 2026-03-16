@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - htpasswd-secret-sealed.yaml
   - google-secret-sealed.yaml
+  - github-secret-sealed.yaml
   - oauth-cluster.yaml
   - cluster-role-binding.yaml
   - consolenotification.yaml
