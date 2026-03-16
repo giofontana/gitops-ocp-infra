@@ -3,4 +3,3 @@ kind: Kustomization
 
 resources:
   - configure-auth.yaml
-  - ingress-cert.yaml
