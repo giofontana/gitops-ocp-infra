@@ -9,6 +9,9 @@ subjects:
   - kind: User
     apiGroup: rbac.authorization.k8s.io
     name: gfontana@redhat.com    
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: giofontana    
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
