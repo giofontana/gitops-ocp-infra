@@ -4,7 +4,7 @@ metadata:
   name: frigate-web
   namespace: frigate
 spec:
-  host: frigate.gfontana.me
+  host: frigate.example.com
   to:
     kind: Service
     name: frigate-service
