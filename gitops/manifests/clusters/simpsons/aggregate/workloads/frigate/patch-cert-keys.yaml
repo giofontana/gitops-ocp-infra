@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  namespace: frigate
+spec:
+  template:
+    spec:
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: frigate-certs
+          items:
+          - key: tls.crt
+            path: fullchain.pem
+          - key: tls.key
+            path: privkey.pem
