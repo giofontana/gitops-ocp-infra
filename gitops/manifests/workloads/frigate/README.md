@@ -9,25 +9,6 @@ Frigate is an open-source NVR built around real-time AI object detection. It use
 
 This directory contains the Kustomize manifests for deploying Frigate as a workload in the OpenShift cluster.
 
-### Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Frigate Deployment                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Camera     │  │   Object     │  │  Recording   │  │
-│  │   Streams    │──│  Detection   │──│   Storage    │  │
-│  │   (RTSP)     │  │   (AI/ML)    │  │   (PVC)      │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-└─────────────────────────────────────────────────────────┘
-           │                                    │
-           ▼                                    ▼
-   ┌───────────────┐                   ┌────────────────┐
-   │   Route       │                   │  Media Storage │
-   │ (TLS/HTTPS)   │                   │    (NFS PV)    │
-   └───────────────┘                   └────────────────┘
-```
-
 ## Directory Structure
 
 ```
@@ -71,26 +52,12 @@ frigate/
 
 ## Certificate Management
 
-**As of March 2026:** Frigate uses **cert-manager** for automated TLS certificate management.
-
 ### Certificate Details
-- **Domain:** `frigate.gfontana.me`
-- **Issuer:** Let's Encrypt Production (via ClusterIssuer)
-- **Secret Name:** `frigate-certs` (in `frigate` namespace)
-- **Auto-renewal:** 30 days before expiry
+- Create a secret named `frigate-certs` with Frigate web certificate details.
+- You may use cert-manager to automate certificate generation and renewal.
 - **Certificate Keys:**
   - `tls.crt` (mapped to `fullchain.pem`)
   - `tls.key` (mapped to `privkey.pem`)
-
-### Certificate Configuration Location
-The Certificate resource is cluster-specific and located at:
-```
-clusters/simpsons/configuration/frigate-certs/certificate-frigate.yaml
-```
-
-This follows the GitOps layered pattern where:
-- **Base workload:** Shared deployment configuration
-- **Cluster config:** Cluster-specific resources (like certificates)
 
 ## Storage
 
