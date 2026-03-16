@@ -24,4 +24,6 @@ spec:
       github:
         clientID: Ov23lis1vDMZlwCtx7qw
         clientSecret:
-          name: github-secret        
+          name: github-secret
+        organizations:
+          - gfontana-org        
