@@ -5,5 +5,6 @@ resources:
   - configure-auth.yaml
   - cert-manager.yaml
   - cert-manager-certs.yaml
+  - lvms-operator.yaml
   - network.yaml
   - openshift-virtualization.yaml
