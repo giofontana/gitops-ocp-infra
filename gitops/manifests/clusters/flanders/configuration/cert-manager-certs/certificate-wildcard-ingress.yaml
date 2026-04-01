@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-apps-cert
+  namespace: openshift-ingress
+spec:
+  secretName: wildcard-apps-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - "*.apps.flanders.lab.gfontana.me"
+  - "*.flanders.lab.gfontana.me"
+  - "*.gfontana.me"
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+  renewBefore: 720h  # Renew 30 days before expiry

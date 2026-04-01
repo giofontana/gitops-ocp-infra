@@ -1,0 +1,7 @@
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: trunk
+  namespace: default
+spec:
+  config: '{ "name":"trunk", "type":"ovn-k8s-cni-overlay", "cniVersion":"0.4.0", "physicalNetworkName":"trunk",  "topology":"localnet", "netAttachDefName":"default/trunk" }'
