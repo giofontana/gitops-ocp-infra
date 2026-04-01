@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app-of-apps-infra-flanders
-  namespace: openshift-gitops
+  namespace: argocd-flanders
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -10,7 +10,7 @@ metadata:
     gitops.ownedBy: default
 spec:
   destination:
-    namespace: openshift-gitops
+    namespace: argocd-flanders
     server: https://kubernetes.default.svc
   project: default
   source:
