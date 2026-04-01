@@ -14,10 +14,10 @@ spec:
         nodeSelector:
           nodeSelectorTerms:
             - matchExpressions:
-                - key: topology.kubernetes.io/lvm-disk
+                - key: kubernetes.io/hostname
                   operator: In
                   values:
-                    - sda
+                    - ned.flanders
         thinPoolConfig:
           chunkSizeCalculationPolicy: Static
           metadataSizeCalculationPolicy: Host
