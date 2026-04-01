@@ -16,6 +16,7 @@ resources:
   - nvidia-gpu.yaml
   - node-maintenance-operator.yaml
   - argocd-workloads.yaml
+  - argocd-flanders.yaml
   - argocd-infra.yaml
   - cert-manager.yaml
   - cert-manager-certs.yaml
