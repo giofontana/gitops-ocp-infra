@@ -2,6 +2,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - frigate.yaml
-  - dbot.yaml
-  - windows11-installer.yaml
+  - ../../base

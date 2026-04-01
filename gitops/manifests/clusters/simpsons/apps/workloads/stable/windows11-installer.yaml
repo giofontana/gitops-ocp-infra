@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: windows11-installer
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+  labels:
+    gitops.ownedBy: default
+spec:
+  destination:
+    namespace: argocd-workloads
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: gitops/manifests/clusters/simpsons/aggregate/workloads/windows11-installer/
+    repoURL: https://github.com/giofontana/gitops-ocp-infra.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: getisourl-script
+data:
+  getisourl.py: |
+    #!/usr/bin/python
+
+    import time
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.select import Select
+
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(15)
+
+    try:
+        driver.get("https://www.microsoft.com/en-us/software-download/windows11")
+
+        select_object = Select(driver.find_element(By.ID, "product-edition"))
+        select_object.select_by_index(1)
+
+        button_element = driver.find_element(By.ID, "submit-product-edition")
+        button_element.click()
+
+        select_object = Select(driver.find_element(By.ID, "product-languages"))
+        select_object.select_by_visible_text("English (United States)")
+
+        button_element = driver.find_element(By.ID, "submit-sku")
+        button_element.click()
+
+        time.sleep(10)
+
+        download_link = driver.find_element(By.PARTIAL_LINK_TEXT, "64-bit")
+        url = download_link.get_attribute("href")
+        print(url)
+
+        with open("/shared/iso-url.txt", "w") as f:
+            f.write(url)
+    except Exception as e:
+        print(f"Error: {e}", flush=True)
+        raise SystemExit(1)
+    finally:
+        driver.close()
