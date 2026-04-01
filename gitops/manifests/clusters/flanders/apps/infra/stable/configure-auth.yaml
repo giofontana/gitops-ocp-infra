@@ -12,7 +12,7 @@ spec:
     server: https://api.flanders.lab.gfontana.me:6443
   project: default
   source:
-    path: gitops/manifests/clusters/all/aggregate/auth/
+    path: gitops/manifests/clusters/flanders/aggregate/infra/auth/
     repoURL: https://github.com/giofontana/gitops-ocp-infra.git
     targetRevision: main
   syncPolicy:

@@ -1,0 +1,15 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+    - name: GitHub
+      mappingMethod: claim
+      type: GitHub
+      github:
+        clientID: Ov23lis1vDMZlwCtx7qw
+        clientSecret:
+          name: github-secret
+        organizations:
+          - gfontana-org        

@@ -9,13 +9,4 @@ spec:
       type: HTPasswd
       htpasswd:
         fileData:
-          name: htpass-secret
-    - name: GitHub
-      mappingMethod: claim
-      type: GitHub
-      github:
-        clientID: Ov23lis1vDMZlwCtx7qw
-        clientSecret:
-          name: github-secret
-        organizations:
-          - gfontana-org        
+          name: htpass-secret 

@@ -1,0 +1,12 @@
+- op: add
+  path: /spec/identityProviders/-
+  value:
+    name: github
+    mappingMethod: claim
+    type: GitHub
+    github:
+      clientID: Ov23liYg7wRRdc63kTrD
+      clientSecret:
+        name: github-secret
+      organizations:
+        - gfontana-org
