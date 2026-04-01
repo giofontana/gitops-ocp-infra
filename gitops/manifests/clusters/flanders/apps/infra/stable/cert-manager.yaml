@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   destination:
-    namespace: argocd-flanders
+    namespace: argocd-manager
     server: https://api.flanders.lab.gfontana.me:6443
   project: default
   source:
