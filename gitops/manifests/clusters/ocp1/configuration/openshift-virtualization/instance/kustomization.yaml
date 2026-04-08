@@ -5,3 +5,4 @@ resources:
   - hyperconverged.yaml
   - storageprofile.yaml
   - storageclass.yaml
+  - demo-vms-namespace.yaml
