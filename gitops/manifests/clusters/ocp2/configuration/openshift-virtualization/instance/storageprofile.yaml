@@ -7,3 +7,10 @@ spec:
     - accessModes:
         - ReadWriteMany
       volumeMode: Block
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode: Block
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode: Filesystem
+  cloneStrategy: csi-clone
