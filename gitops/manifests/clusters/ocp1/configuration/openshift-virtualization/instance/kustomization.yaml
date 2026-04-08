@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - hyperconverged.yaml
   - storageprofile.yaml
+  - storageclass.yaml
