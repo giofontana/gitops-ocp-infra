@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frigate
+  namespace: argocd-flanders
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  destination:
+    namespace: argocd-manager
+    server: https://api.flanders.lab.gfontana.me:6443
+  project: default
+  source:
+    path: gitops/manifests/clusters/flanders/aggregate/workloads/frigate/
+    repoURL: https://github.com/giofontana/gitops-ocp-infra.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
