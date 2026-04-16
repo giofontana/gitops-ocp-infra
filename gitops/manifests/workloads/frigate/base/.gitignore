@@ -1,2 +1,3 @@
 config.yaml
 frigate-certs.yaml
+frigate-config-secret.yaml
