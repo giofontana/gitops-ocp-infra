@@ -7,5 +7,5 @@ commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 resources:
-  - ../../../../../operators/mtv-operator/overlays/release-v2.7
+  - ../../../../../operators/mtv-operator/overlays/release-v2.11
   - ../../../configuration/mtv
