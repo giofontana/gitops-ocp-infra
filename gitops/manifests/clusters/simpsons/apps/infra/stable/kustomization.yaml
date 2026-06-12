@@ -22,3 +22,4 @@ resources:
   - cert-manager.yaml
   - cert-manager-certs.yaml
   - openshift-pipelines.yaml
+  - mtv.yaml
