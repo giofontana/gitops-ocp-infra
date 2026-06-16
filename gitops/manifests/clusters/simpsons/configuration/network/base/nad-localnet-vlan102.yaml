@@ -11,5 +11,6 @@ spec:
     "physicalNetworkName":"trunk",
     "vlanId": 102,
     "topology":"localnet",
-    "netAttachDefName":"default/vlan102"
+    "netAttachDefName":"default/vlan102", 
+    "mtu": 1500
     }'
